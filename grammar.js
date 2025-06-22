@@ -1064,6 +1064,7 @@ module.exports = grammar({
             $.integer,
             $.float,
             $.string,
+            $.char_string,
             $.string_directive,
             $.struct_literal,
             $.array_literal,
@@ -1122,8 +1123,11 @@ module.exports = grammar({
 
         address: $ => seq('*', $.expressions),
 
+        char_string: $ => seq(
+            field('modifier', '#char'),
+            $.string,
+        ),
         string: $ => seq(
-            field('modifier', optional('#char')),
             '"',
             repeat(choice(
                 $.string_content,
@@ -1188,7 +1192,7 @@ module.exports = grammar({
 
         // extras
 
-        note: $ => seq('@', $.identifier),
+        note: $ => seq('@', /[^\s;]+|"[^"\\\n]*"/),
 
         comment: _ => token(seq('//', /.*/)),
         // comment: _ => token(seq('//', /(\\+(.|\r?\n)|[^\\\n])*/)),

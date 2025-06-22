@@ -192,6 +192,10 @@
         "named": true
       },
       {
+        "type": "char_string",
+        "named": true
+      },
+      {
         "type": "float",
         "named": true
       },
@@ -992,6 +996,32 @@
         },
         {
           "type": "types",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "char_string",
+    "named": true,
+    "fields": {
+      "modifier": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "#char",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string",
           "named": true
         }
       ]
@@ -1928,17 +1958,7 @@
   {
     "type": "note",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "null",
@@ -2777,18 +2797,7 @@
   {
     "type": "string",
     "named": true,
-    "fields": {
-      "modifier": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "#char",
-            "named": false
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
       "required": false,
@@ -3724,7 +3733,8 @@
   },
   {
     "type": "comment",
-    "named": true
+    "named": true,
+    "extra": true
   },
   {
     "type": "continue",

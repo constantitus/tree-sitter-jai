@@ -6431,6 +6431,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "char_string"
+        },
+        {
+          "type": "SYMBOL",
           "name": "string_directive"
         },
         {
@@ -6845,25 +6849,26 @@
         }
       ]
     },
-    "string": {
+    "char_string": {
       "type": "SEQ",
       "members": [
         {
           "type": "FIELD",
           "name": "modifier",
           "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "#char"
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
+            "type": "STRING",
+            "value": "#char"
           }
         },
+        {
+          "type": "SYMBOL",
+          "name": "string"
+        }
+      ]
+    },
+    "string": {
+      "type": "SEQ",
+      "members": [
         {
           "type": "STRING",
           "value": "\""
@@ -7699,8 +7704,8 @@
           "value": "@"
         },
         {
-          "type": "SYMBOL",
-          "name": "identifier"
+          "type": "PATTERN",
+          "value": "[^\\s;]+|\"[^\"\\\\\\n]*\""
         }
       ]
     },
@@ -7914,5 +7919,6 @@
     "statements_that_dont_require_a_semicolon",
     "expressions",
     "literal"
-  ]
+  ],
+  "reserved": {}
 }
