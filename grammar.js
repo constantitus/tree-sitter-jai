@@ -467,43 +467,65 @@ module.exports = grammar({
             alias(field('directive', '#assert'), $.compiler_directive),
             $.expressions, optional(field('message', $.string))
         ),
-    
+
+        // TODO: this is still not right...
         asm_statement: $ => prec.right(seq(
             alias(field('directive', '#asm'), $.compiler_directive),
             field('modifier', optional(comma_sep1($.identifier))),
             '{',
-            repeat(seq($.asm_line, ';')),
+            repeat($.asm_line),
             '}'
         )),
 
-        backtick_statement: $ => seq('`', $.statement),
-
-        asm_line: $ => choice(
+        asm_register: $ => choice(
             seq(
-                field('mnemoric', seq(
-                    $.identifier, optional(seq(choice('.', '?'), $.identifier))
-                )),
+                field('name', $.identifier),
+                ':',
                 optional(seq(
-                    choice($.identifier, $.asm_register),
+                    field('type', $.identifier),
                     optional(seq(
-                        ',',
-                        choice(
-                            seq('[', $.expressions, ']'),
-                            $.expressions
-                        ),
+                        '===',
+                        $.asm_size_or_register,
                     ))
-                ))
+                )),
             ),
+            seq(
+                field('name', $.identifier),
+                '===',
+                $.asm_size_or_register,
+            )
+        ),
+
+        asm_size_or_register: _ => prec.left(999, /[A-Za-z0-9]+/),
+
+        asm_line: $ => seq(choice(
+            seq(
+                $.asm_mnemonic,
+                sep($.asm_operand, ','),
+            ),
+            $.asm_register,
+        ), ';'),
+
+        asm_mnemonic: $ => prec.right(seq(
+            $.identifier,
+            optional(seq(
+                // TODO: e.g. mov.64 does not parse correctly
+                choice('.', '?'),
+                $.asm_size_or_register
+            ))
+        )),
+
+        asm_operand: $ => choice(
+            seq('[', $.expressions, ']'), // dereference
+            $.expressions,
             $.asm_register,
         ),
 
-        asm_register: $ => seq(
-            field('register', $.identifier), ':',
-            optional(seq(
-                optional(seq($.identifier, '===',)),
-                choice($.identifier, $.integer)
-            ))
-        ),
+        asm_size: $ => prec(999, seq(
+            $.asm_size_or_register
+        )),
+
+        backtick_statement: $ => seq('`', $.statement),
 
         using_statement: $ => prec.left(PREC.CAST, seq(
             field('keyword', 'using'),
@@ -678,7 +700,7 @@ module.exports = grammar({
                 ['==',  PREC.EQUALITY],
                 ['!=',  PREC.EQUALITY],
                 ['|',   PREC.BITWISE_OR],
-                ['~',   PREC.BITWISE_XOR],
+                ['^',   PREC.BITWISE_XOR],
                 ['&',   PREC.BITWISE_AND],
                 ['&~',  PREC.BITWISE_AND_NOT],
                 ['<<',  PREC.SHIFT],
@@ -704,6 +726,7 @@ module.exports = grammar({
 
         pointer_expression: $ => prec.left(seq(
             field('operator', '<<'),
+            field('operator', '(.*)'),
             field('argument', $.expressions)
         )),
 
@@ -852,7 +875,7 @@ module.exports = grammar({
         )),
 
         // I hate writing tree-sitter parsers so bad rn...
-        member_type_in_procedure_returns: $ => prec.right(999, field('type',
+        member_type_in_procedure_returns: $ => prec.left(999, field('type',
             seq(
                 choice(
                     $.member_type_in_procedure_returns,
@@ -1008,24 +1031,7 @@ module.exports = grammar({
             //  variable : struct() {} = .{};
             // optional(seq( '(', ')')),
 
-            '{',
-            optional(seq(
-                repeat(prec(-1, choice(
-                    seq(
-                        choice(
-                            seq(optional('#as'), $.using_statement),
-                            $.variable_declaration,
-                            $.const_declaration,
-                            // $.assignment_statement, // not sure about this one
-                        ),
-                        ';'
-                    ),
-                    $.no_semicolon_declaration,
-                    $.struct_or_union
-                ))),
-                optional(';'),
-            )),
-            '}',
+            $.struct_or_union_block,
         )),
 
         anonymous_enum_type: $ => prec(-1, seq(
@@ -1123,10 +1129,18 @@ module.exports = grammar({
 
         address: $ => seq('*', $.expressions),
 
+<<<<<<< HEAD
         char_string: $ => seq(
             field('modifier', '#char'),
             $.string,
         ),
+=======
+        char_string: $ => prec.left(seq(
+            field('modifier', '#char'),
+            $.string
+        )),
+
+>>>>>>> ad55410 (maintenance update, fixed things, broke other things)
         string: $ => seq(
             '"',
             repeat(choice(
@@ -1144,7 +1158,7 @@ module.exports = grammar({
         ),
 
         // anything that is not whitespace
-        heredoc_body: $ => /[^\s]+/,
+        heredoc_body: _ => /[^\s]+/,
 
         string_content: _ => token.immediate(prec(1, /[^"\\\n]+/)),
         escape_sequence: _ => token.immediate(seq(

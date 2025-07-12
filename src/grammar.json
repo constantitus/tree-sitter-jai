@@ -2376,17 +2376,8 @@
           {
             "type": "REPEAT",
             "content": {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "asm_line"
-                },
-                {
-                  "type": "STRING",
-                  "value": ";"
-                }
-              ]
+              "type": "SYMBOL",
+              "name": "asm_line"
             }
           },
           {
@@ -2396,20 +2387,7 @@
         ]
       }
     },
-    "backtick_statement": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "`"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "statement"
-        }
-      ]
-    },
-    "asm_line": {
+    "asm_register": {
       "type": "CHOICE",
       "members": [
         {
@@ -2417,46 +2395,15 @@
           "members": [
             {
               "type": "FIELD",
-              "name": "mnemoric",
+              "name": "name",
               "content": {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "identifier"
-                  },
-                  {
-                    "type": "CHOICE",
-                    "members": [
-                      {
-                        "type": "SEQ",
-                        "members": [
-                          {
-                            "type": "CHOICE",
-                            "members": [
-                              {
-                                "type": "STRING",
-                                "value": "."
-                              },
-                              {
-                                "type": "STRING",
-                                "value": "?"
-                              }
-                            ]
-                          },
-                          {
-                            "type": "SYMBOL",
-                            "name": "identifier"
-                          }
-                        ]
-                      },
-                      {
-                        "type": "BLANK"
-                      }
-                    ]
-                  }
-                ]
+                "type": "SYMBOL",
+                "name": "identifier"
               }
+            },
+            {
+              "type": "STRING",
+              "value": ":"
             },
             {
               "type": "CHOICE",
@@ -2465,17 +2412,12 @@
                   "type": "SEQ",
                   "members": [
                     {
-                      "type": "CHOICE",
-                      "members": [
-                        {
-                          "type": "SYMBOL",
-                          "name": "identifier"
-                        },
-                        {
-                          "type": "SYMBOL",
-                          "name": "asm_register"
-                        }
-                      ]
+                      "type": "FIELD",
+                      "name": "type",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "identifier"
+                      }
                     },
                     {
                       "type": "CHOICE",
@@ -2485,33 +2427,11 @@
                           "members": [
                             {
                               "type": "STRING",
-                              "value": ","
+                              "value": "==="
                             },
                             {
-                              "type": "CHOICE",
-                              "members": [
-                                {
-                                  "type": "SEQ",
-                                  "members": [
-                                    {
-                                      "type": "STRING",
-                                      "value": "["
-                                    },
-                                    {
-                                      "type": "SYMBOL",
-                                      "name": "expressions"
-                                    },
-                                    {
-                                      "type": "STRING",
-                                      "value": "]"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "SYMBOL",
-                                  "name": "expressions"
-                                }
-                              ]
+                              "type": "SYMBOL",
+                              "name": "asm_size_or_register"
                             }
                           ]
                         },
@@ -2530,32 +2450,49 @@
           ]
         },
         {
-          "type": "SYMBOL",
-          "name": "asm_register"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "name",
+              "content": {
+                "type": "SYMBOL",
+                "name": "identifier"
+              }
+            },
+            {
+              "type": "STRING",
+              "value": "==="
+            },
+            {
+              "type": "SYMBOL",
+              "name": "asm_size_or_register"
+            }
+          ]
         }
       ]
     },
-    "asm_register": {
+    "asm_size_or_register": {
+      "type": "PREC_LEFT",
+      "value": 999,
+      "content": {
+        "type": "PATTERN",
+        "value": "[A-Za-z0-9]+"
+      }
+    },
+    "asm_line": {
       "type": "SEQ",
       "members": [
-        {
-          "type": "FIELD",
-          "name": "register",
-          "content": {
-            "type": "SYMBOL",
-            "name": "identifier"
-          }
-        },
-        {
-          "type": "STRING",
-          "value": ":"
-        },
         {
           "type": "CHOICE",
           "members": [
             {
               "type": "SEQ",
               "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "asm_mnemonic"
+                },
                 {
                   "type": "CHOICE",
                   "members": [
@@ -2564,11 +2501,31 @@
                       "members": [
                         {
                           "type": "SYMBOL",
-                          "name": "identifier"
+                          "name": "asm_operand"
                         },
                         {
-                          "type": "STRING",
-                          "value": "==="
+                          "type": "REPEAT",
+                          "content": {
+                            "type": "SEQ",
+                            "members": [
+                              {
+                                "type": "STRING",
+                                "value": ","
+                              },
+                              {
+                                "type": "CHOICE",
+                                "members": [
+                                  {
+                                    "type": "SYMBOL",
+                                    "name": "asm_operand"
+                                  },
+                                  {
+                                    "type": "BLANK"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
                         }
                       ]
                     },
@@ -2576,26 +2533,117 @@
                       "type": "BLANK"
                     }
                   ]
-                },
-                {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "SYMBOL",
-                      "name": "identifier"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "integer"
-                    }
-                  ]
                 }
               ]
             },
             {
-              "type": "BLANK"
+              "type": "SYMBOL",
+              "name": "asm_register"
             }
           ]
+        },
+        {
+          "type": "STRING",
+          "value": ";"
+        }
+      ]
+    },
+    "asm_mnemonic": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "identifier"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "."
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "?"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "asm_size_or_register"
+                  }
+                ]
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "asm_operand": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "["
+            },
+            {
+              "type": "SYMBOL",
+              "name": "expressions"
+            },
+            {
+              "type": "STRING",
+              "value": "]"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "expressions"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "asm_register"
+        }
+      ]
+    },
+    "asm_size": {
+      "type": "PREC",
+      "value": 999,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "asm_size_or_register"
+          }
+        ]
+      }
+    },
+    "backtick_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "`"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "statement"
         }
       ]
     },
@@ -4041,7 +4089,7 @@
                 "name": "operator",
                 "content": {
                   "type": "STRING",
-                  "value": "~"
+                  "value": "^"
                 }
               },
               {
@@ -4432,6 +4480,14 @@
             "content": {
               "type": "STRING",
               "value": "<<"
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "operator",
+            "content": {
+              "type": "STRING",
+              "value": "(.*)"
             }
           },
           {
@@ -5241,7 +5297,7 @@
       }
     },
     "member_type_in_procedure_returns": {
-      "type": "PREC_RIGHT",
+      "type": "PREC_LEFT",
       "value": 999,
       "content": {
         "type": "FIELD",
@@ -6068,100 +6124,8 @@
             ]
           },
           {
-            "type": "STRING",
-            "value": "{"
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "REPEAT",
-                    "content": {
-                      "type": "PREC",
-                      "value": -1,
-                      "content": {
-                        "type": "CHOICE",
-                        "members": [
-                          {
-                            "type": "SEQ",
-                            "members": [
-                              {
-                                "type": "CHOICE",
-                                "members": [
-                                  {
-                                    "type": "SEQ",
-                                    "members": [
-                                      {
-                                        "type": "CHOICE",
-                                        "members": [
-                                          {
-                                            "type": "STRING",
-                                            "value": "#as"
-                                          },
-                                          {
-                                            "type": "BLANK"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "type": "SYMBOL",
-                                        "name": "using_statement"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "type": "SYMBOL",
-                                    "name": "variable_declaration"
-                                  },
-                                  {
-                                    "type": "SYMBOL",
-                                    "name": "const_declaration"
-                                  }
-                                ]
-                              },
-                              {
-                                "type": "STRING",
-                                "value": ";"
-                              }
-                            ]
-                          },
-                          {
-                            "type": "SYMBOL",
-                            "name": "no_semicolon_declaration"
-                          },
-                          {
-                            "type": "SYMBOL",
-                            "name": "struct_or_union"
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "type": "CHOICE",
-                    "members": [
-                      {
-                        "type": "STRING",
-                        "value": ";"
-                      },
-                      {
-                        "type": "BLANK"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
-          },
-          {
-            "type": "STRING",
-            "value": "}"
+            "type": "SYMBOL",
+            "name": "struct_or_union_block"
           }
         ]
       }
@@ -6850,6 +6814,7 @@
       ]
     },
     "char_string": {
+<<<<<<< HEAD
       "type": "SEQ",
       "members": [
         {
@@ -6870,6 +6835,32 @@
       "type": "SEQ",
       "members": [
         {
+=======
+      "type": "PREC_LEFT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "modifier",
+            "content": {
+              "type": "STRING",
+              "value": "#char"
+            }
+          },
+          {
+            "type": "SYMBOL",
+            "name": "string"
+          }
+        ]
+      }
+    },
+    "string": {
+      "type": "SEQ",
+      "members": [
+        {
+>>>>>>> ad55410 (maintenance update, fixed things, broke other things)
           "type": "STRING",
           "value": "\""
         },

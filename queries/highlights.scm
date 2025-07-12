@@ -8,27 +8,52 @@
 
 ; Keywords
 [
-  "inline"
-  "no_inline"
-  "struct"
-  "union"
-  "using"
-  "enum"
-  "enum_flags"
+  ; from modules/Jai_Lexer
   "if"
-  "then"
+  "xx"
+
   "ifx"
-  "else"
-  "case"
   "for"
+
+  "then"
+  "else"
+  "null"
+  "case"
+  "enum"
+  "true"
+  "cast"
+
   "while"
   "break"
-  "continue"
-  "remove"
+  "using"
   "defer"
-  "cast"
-  "xx"
+  "false"
+  "union"
+
+  "return"
+  "struct"
+  "inline"
+  "remove"
+
+  ; "size_of"
+  "type_of"
+  ; "code_of"
+  ; "context"
+
+  "continue"
+  "operator"
+
+  ; "type_info"
+  "no_inline"
+  "interface"
+
+  "enum_flags"
+
+  ; "is_constant"
+
   "push_context"
+
+  ; "initializer_of"
 ] @keyword
 
 [
@@ -230,3 +255,4 @@ type: ("type_of") @type
 (heredoc_start) @none
 (heredoc_end) @none
 (heredoc_body) @string
+(note) @string

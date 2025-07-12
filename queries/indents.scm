@@ -18,7 +18,6 @@
   (enum_declaration "{")
   (struct_or_union_block "{")
   (struct_literal "{")
-  (anonymous_struct_type "{")
   (anonymous_enum_type "{")
   (asm_statement "{")
   (array_literal "[")

@@ -367,27 +367,11 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
-      "required": false,
+      "multiple": false,
+      "required": true,
       "types": [
         {
-          "type": "const_declaration",
-          "named": true
-        },
-        {
-          "type": "no_semicolon_declaration",
-          "named": true
-        },
-        {
-          "type": "struct_or_union",
-          "named": true
-        },
-        {
-          "type": "using_statement",
-          "named": true
-        },
-        {
-          "type": "variable_declaration",
+          "type": "struct_or_union_block",
           "named": true
         }
       ]
@@ -456,29 +440,52 @@
   {
     "type": "asm_line",
     "named": true,
-    "fields": {
-      "mnemoric": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": ".",
-            "named": false
-          },
-          {
-            "type": "?",
-            "named": false
-          },
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
+      "types": [
+        {
+          "type": "asm_mnemonic",
+          "named": true
+        },
+        {
+          "type": "asm_operand",
+          "named": true
+        },
+        {
+          "type": "asm_register",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "asm_mnemonic",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "asm_size_or_register",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "asm_operand",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
       "types": [
         {
           "type": "asm_register",
@@ -495,9 +502,19 @@
     "type": "asm_register",
     "named": true,
     "fields": {
-      "register": {
+      "name": {
         "multiple": false,
         "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": false,
         "types": [
           {
             "type": "identifier",
@@ -507,19 +524,20 @@
       }
     },
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": false,
       "types": [
         {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "integer",
+          "type": "asm_size_or_register",
           "named": true
         }
       ]
     }
+  },
+  {
+    "type": "asm_size_or_register",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "asm_statement",
@@ -794,15 +812,15 @@
             "named": false
           },
           {
+            "type": "^",
+            "named": false
+          },
+          {
             "type": "|",
             "named": false
           },
           {
             "type": "||",
-            "named": false
-          },
-          {
-            "type": "~",
             "named": false
           }
         ]
@@ -2152,9 +2170,13 @@
         ]
       },
       "operator": {
-        "multiple": false,
+        "multiple": true,
         "required": true,
         "types": [
+          {
+            "type": "(.*)",
+            "named": false
+          },
           {
             "type": "<<",
             "named": false
@@ -3480,10 +3502,6 @@
     "named": false
   },
   {
-    "type": "#as",
-    "named": false
-  },
-  {
     "type": "#char",
     "named": false
   },
@@ -3533,6 +3551,10 @@
   },
   {
     "type": "(",
+    "named": false
+  },
+  {
+    "type": "(.*)",
     "named": false
   },
   {
