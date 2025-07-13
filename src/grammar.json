@@ -6814,28 +6814,6 @@
       ]
     },
     "char_string": {
-<<<<<<< HEAD
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "FIELD",
-          "name": "modifier",
-          "content": {
-            "type": "STRING",
-            "value": "#char"
-          }
-        },
-        {
-          "type": "SYMBOL",
-          "name": "string"
-        }
-      ]
-    },
-    "string": {
-      "type": "SEQ",
-      "members": [
-        {
-=======
       "type": "PREC_LEFT",
       "value": 0,
       "content": {
@@ -6860,7 +6838,6 @@
       "type": "SEQ",
       "members": [
         {
->>>>>>> ad55410 (maintenance update, fixed things, broke other things)
           "type": "STRING",
           "value": "\""
         },

@@ -1129,18 +1129,11 @@ module.exports = grammar({
 
         address: $ => seq('*', $.expressions),
 
-<<<<<<< HEAD
-        char_string: $ => seq(
-            field('modifier', '#char'),
-            $.string,
-        ),
-=======
         char_string: $ => prec.left(seq(
             field('modifier', '#char'),
             $.string
         )),
 
->>>>>>> ad55410 (maintenance update, fixed things, broke other things)
         string: $ => seq(
             '"',
             repeat(choice(
