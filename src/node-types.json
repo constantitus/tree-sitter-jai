@@ -367,9 +367,13 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "compiler_directive",
+          "named": true
+        },
         {
           "type": "struct_or_union_block",
           "named": true
@@ -2170,7 +2174,7 @@
         ]
       },
       "operator": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
           {

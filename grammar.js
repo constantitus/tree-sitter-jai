@@ -8,7 +8,6 @@
 // @ts-nocheck
 
 const PREC = {
-    PARENTHESES:     -1,
     ASSIGNMENT:       1,
 
     LOGICAL_OR:       4,
@@ -70,6 +69,8 @@ module.exports = grammar({
         [$.identifier_type, $.named_return, $.types],
 
         [$.member_type_in_procedure_returns, $.identifier_type, $.types, $.member_type],
+
+        [$.parenthesized_expression, $.assignment_parameters],
     ],
 
     externals: $ => [
@@ -677,12 +678,12 @@ module.exports = grammar({
         // expressions
         //
 
-        parenthesized_expression: $ => prec(PREC.PARENTHESES,
+        parenthesized_expression: $ => 
             seq('(', choice(
                 $.expressions,
                 $.identifier
             ), ')')
-        ),
+        ,
 
         unary_expression: $ => prec.left(PREC.UNARY, seq(
             field('operator', choice('+', '-', '~', '!', '&')),
@@ -725,8 +726,10 @@ module.exports = grammar({
         },
 
         pointer_expression: $ => prec.left(seq(
-            field('operator', '<<'),
-            field('operator', '(.*)'),
+            choice(
+                field('operator', '<<'),
+                field('operator', '(.*)'),
+            ),
             field('argument', $.expressions)
         )),
 
@@ -1024,6 +1027,7 @@ module.exports = grammar({
             //  variable := struct {};
             //  variable : struct {} = .{};
             choice('struct', 'union'),
+            optional($.compiler_directive),
 
             // Also valid in terms that the compiler will not complain, but
             // useless since you cannot put anything inside the parentheses:
