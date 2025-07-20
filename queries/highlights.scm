@@ -165,7 +165,7 @@ keyword: (identifier) @keyword
 
 ;(character) @character
 
-(string (escape_sequence) @string.escape)
+(string_contents (escape_sequence) @string.escape)
 
 (boolean) @boolean
 
