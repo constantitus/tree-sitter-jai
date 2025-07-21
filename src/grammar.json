@@ -6883,6 +6883,17 @@
         {
           "type": "SYMBOL",
           "name": "escape_sequence"
+        },
+        {
+          "type": "PREC",
+          "value": 1,
+          "content": {
+            "type": "TOKEN",
+            "content": {
+              "type": "STRING",
+              "value": "/*"
+            }
+          }
         }
       ]
     },
@@ -6915,19 +6926,35 @@
       ]
     },
     "heredoc_body": {
-      "type": "PREC",
-      "value": 1,
-      "content": {
-        "type": "TOKEN",
-        "content": {
-          "type": "PATTERN",
-          "value": "[^\\s]+"
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "PREC",
+          "value": 2,
+          "content": {
+            "type": "TOKEN",
+            "content": {
+              "type": "PATTERN",
+              "value": "[^\\s]+"
+            }
+          }
+        },
+        {
+          "type": "PREC",
+          "value": 2,
+          "content": {
+            "type": "TOKEN",
+            "content": {
+              "type": "STRING",
+              "value": "/*"
+            }
+          }
         }
-      }
+      ]
     },
     "string_content": {
       "type": "PREC",
-      "value": 1,
+      "value": 2,
       "content": {
         "type": "IMMEDIATE_TOKEN",
         "content": {
@@ -6938,7 +6965,7 @@
     },
     "escape_sequence": {
       "type": "PREC",
-      "value": 1,
+      "value": 2,
       "content": {
         "type": "IMMEDIATE_TOKEN",
         "content": {
@@ -7713,7 +7740,7 @@
     },
     "comment": {
       "type": "PREC",
-      "value": -1,
+      "value": 1,
       "content": {
         "type": "TOKEN",
         "content": {
@@ -7732,42 +7759,38 @@
       }
     },
     "block_comment": {
-      "type": "PREC",
-      "value": -1,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "TOKEN",
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": 0,
             "content": {
-              "type": "PREC",
-              "value": -1,
-              "content": {
-                "type": "STRING",
-                "value": "/*"
-              }
-            }
-          },
-          {
-            "type": "REPEAT",
-            "content": {
-              "type": "SYMBOL",
-              "name": "block_comment_text"
-            }
-          },
-          {
-            "type": "TOKEN",
-            "content": {
-              "type": "PREC",
-              "value": -1,
-              "content": {
-                "type": "STRING",
-                "value": "*/"
-              }
+              "type": "STRING",
+              "value": "/*"
             }
           }
-        ]
-      }
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "block_comment_text"
+          }
+        },
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": 0,
+            "content": {
+              "type": "STRING",
+              "value": "*/"
+            }
+          }
+        }
+      ]
     },
     "block_comment_text": {
       "type": "PREC_RIGHT",
@@ -7781,32 +7804,10 @@
               "type": "TOKEN",
               "content": {
                 "type": "PREC",
-                "value": -1,
+                "value": 0,
                 "content": {
                   "type": "PATTERN",
-                  "value": "[^*/]|[^*][/]|[/][^/*]|[*][/][ \t]*(\r\n|\n)?[ \t]*[/][*]"
-                }
-              }
-            },
-            {
-              "type": "TOKEN",
-              "content": {
-                "type": "PREC",
-                "value": -1,
-                "content": {
-                  "type": "PATTERN",
-                  "value": "\\*"
-                }
-              }
-            },
-            {
-              "type": "TOKEN",
-              "content": {
-                "type": "PREC",
-                "value": -1,
-                "content": {
-                  "type": "PATTERN",
-                  "value": "\\/"
+                  "value": "[^*/]|[*][^/]|[/][^*]"
                 }
               }
             }

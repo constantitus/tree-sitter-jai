@@ -1147,6 +1147,7 @@ module.exports = grammar({
         string_contents: $ => choice(
             $.string_content,
             $.escape_sequence,
+            prec(1, token('/*'))
         ),
 
         string_directive: $ => seq(
@@ -1157,10 +1158,13 @@ module.exports = grammar({
         ),
 
         // anything that is not whitespace
-        heredoc_body: _ => prec(1, token(/[^\s]+/)),
-        string_content: _ => prec(1, token.immediate(/[^"\\\n]+/)),
+        heredoc_body: _ => choice(
+            prec(2, token(/[^\s]+/)),
+            prec(2, token('/*'))
+        ),
+        string_content: _ => prec(2, token.immediate(/[^"\\\n]+/)),
 
-        escape_sequence: _ => prec(1, token.immediate(seq(
+        escape_sequence: _ => prec(2, token.immediate(seq(
             '\\',
             choice(
                 /[^xu0-7]/,
@@ -1207,27 +1211,29 @@ module.exports = grammar({
 
         note: $ => seq('@', /[^\s;]+|"[^"\\\n]*"/),
 
-        comment: _ => prec(-1, token(seq('//', /.*/))),
+        comment: _ => prec(1, token(seq('//', /.*/))),
         // comment: _ => token(seq('//', /(\\+(.|\r?\n)|[^\\\n])*/)),
 
         // Credits and thanks to tree-sitter-tlaplus for this regex
-        block_comment: $ => prec(-1, seq(
-            token(prec(-1, "/*")),
-            repeat(
-                $.block_comment_text,
-            ),
-            token(prec(-1, '*/'))
-        )),
+        block_comment: $ => seq(
+            token(prec(0, "/*")),
+            repeat($.block_comment_text,),
+            token(prec(0, '*/'))
+        ),
 
         block_comment_text: $ => prec.right(repeat1(choice(
-            token(prec(-1, regexOr(
-                '[^*/]',    // any symbol except reserved
-                '[^*][/]',  // closing parenthesis, which is not a comment end
-                '[/][^/*]', // opening parenthesis, which is not a comment start
-                '[*][/][ \t]*(\r\n|\n)?[ \t]*[/][*]' // contiguous block comment border
-            ))),
-            token(prec(-1, /\*/)),
-            token(prec(-1, /\//)),
+            token(prec(0, /[^*/]|[*][^/]|[/][^*]/)),
+            // token(prec(0, /[^*]|[^/]/)),
+
+            // token(prec(1, regexOr(
+            //     '[^*/]',    // any symbol except reserved
+            //     '[^*][/]',  // closing parenthesis, which is not a comment end
+            //     '[/][^/*]', // opening parenthesis, which is not a comment start
+            //     '[*][/][ \t]*(\r\n|\n)?[ \t]*[/][*]' // contiguous block comment border
+            // ))),
+            // token(prec(1, /\*/)),
+            // token(prec(1, /\//)),
+
         ))),
 }
 });
