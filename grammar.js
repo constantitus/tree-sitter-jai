@@ -1209,9 +1209,9 @@ module.exports = grammar({
 
         // extras
 
-        note: $ => seq('@', /[^\s;]+|"[^"\\\n]*"/),
+        note: $ => token(prec(-1, seq('@', /[^\s;]+|"[^"\\\n]*"/))),
 
-        comment: _ => prec(1, token(seq('//', /.*/))),
+        comment: _ => prec(1, token(seq('//', /([^*/\n]|[*][^/\n]|[/][^*\n])*/))),
         // comment: _ => token(seq('//', /(\\+(.|\r?\n)|[^\\\n])*/)),
 
         // Credits and thanks to tree-sitter-tlaplus for this regex
@@ -1221,7 +1221,7 @@ module.exports = grammar({
             token(prec(0, '*/'))
         ),
 
-        block_comment_text: $ => prec.right(repeat1(choice(
+        block_comment_text: $ => prec.right(0, repeat1(choice(
             token(prec(0, /[^*/]|[*][^/]|[/][^*]/)),
             // token(prec(0, /[^*]|[^/]/)),
 

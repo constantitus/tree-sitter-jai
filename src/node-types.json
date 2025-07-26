@@ -1993,11 +1993,6 @@
     }
   },
   {
-    "type": "note",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "null",
     "named": true,
     "fields": {
@@ -3749,10 +3744,6 @@
     "named": false
   },
   {
-    "type": "@",
-    "named": false
-  },
-  {
     "type": "[",
     "named": false
   },
@@ -3855,6 +3846,11 @@
   {
     "type": "no_inline",
     "named": false
+  },
+  {
+    "type": "note",
+    "named": true,
+    "extra": true
   },
   {
     "type": "null",

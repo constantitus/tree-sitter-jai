@@ -7726,17 +7726,24 @@
       ]
     },
     "note": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "@"
-        },
-        {
-          "type": "PATTERN",
-          "value": "[^\\s;]+|\"[^\"\\\\\\n]*\""
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": -1,
+        "content": {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "@"
+            },
+            {
+              "type": "PATTERN",
+              "value": "[^\\s;]+|\"[^\"\\\\\\n]*\""
+            }
+          ]
         }
-      ]
+      }
     },
     "comment": {
       "type": "PREC",
@@ -7752,7 +7759,7 @@
             },
             {
               "type": "PATTERN",
-              "value": ".*"
+              "value": "([^*/\\n]|[*][^/\\n]|[/][^*\\n])*"
             }
           ]
         }
