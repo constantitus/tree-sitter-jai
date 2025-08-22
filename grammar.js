@@ -381,16 +381,12 @@ module.exports = grammar({
             optional($.compiler_directive),
             optional($.specified_directive),
             '{',
-            sep(
-                seq(
-                    $.identifier,
-                    optional(seq(':', ':', $.expressions))
-                ),
-                ';'
-            ),
+            repeat($.enum_field),
             '}',
         )),
-
+        enum_field: ($) =>
+          seq($.identifier, optional(seq(":", ":", $.expressions)), ";"),
+          
         variable_declaration: $ => seq(
             prec.right(field('name', comma_sep1($.identifier))),
             // optional(','),
@@ -1043,13 +1039,7 @@ module.exports = grammar({
             optional(field('type', $.types)),
             optional($.specified_directive),
             '{',
-            sep(
-                seq(
-                    $.identifier,
-                    optional(seq(':', ':', $.expressions))
-                ),
-                ';'
-            ),
+            repeat($.enum_field),
             '}',
         )),
 
