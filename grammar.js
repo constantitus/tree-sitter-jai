@@ -384,8 +384,15 @@ module.exports = grammar({
             repeat($.enum_field),
             '}',
         )),
-        enum_field: ($) =>
-          seq($.identifier, optional(seq(":", ":", $.expressions)), ";"),
+
+        enum_field: ($) => choice(
+            seq(
+                $.identifier,
+                optional(seq(":", ":", $.expressions)),
+                ";"
+            ),
+            $.run_or_insert_expression,
+        ),
           
         variable_declaration: $ => seq(
             prec.right(field('name', comma_sep1($.identifier))),
@@ -1204,7 +1211,6 @@ module.exports = grammar({
         comment: _ => prec(1, token(seq('//', /([^*/\n]|[*][^/\n]|[/][^*\n])*/))),
         // comment: _ => token(seq('//', /(\\+(.|\r?\n)|[^\\\n])*/)),
 
-        // Credits and thanks to tree-sitter-tlaplus for this regex
         block_comment: $ => seq(
             token(prec(0, "/*")),
             repeat($.block_comment_text,),

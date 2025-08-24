@@ -154,7 +154,7 @@ keyword: (identifier) @keyword
 
 (member_expression . "." (identifier) @constant)
 
-(enum_declaration "{" (identifier) @constant)
+(enum_field (identifier) @constant)
 
 ; Literals
 

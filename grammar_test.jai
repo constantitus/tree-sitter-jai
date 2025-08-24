@@ -90,13 +90,17 @@ TestStruct2 :: struct (type: Type = s64) {
         b: float;
     }
     
-    c: enum {
-    }
-
     padding:   [120] u8;
     rectangle: Rectangle #align 16;
     next: *Test_Struct2;
 };
+
+TestEnum :: enum { A; B; }
+test_enum: enum {
+    A;
+    B;
+    #run -> string { return "C;"; }
+}
 
 Rectangle :: struct
 #modify {
