@@ -352,7 +352,7 @@
       "required": false,
       "types": [
         {
-          "type": "expressions",
+          "type": "enum_field",
           "named": true
         },
         {
@@ -1267,11 +1267,30 @@
       "required": false,
       "types": [
         {
-          "type": "expressions",
+          "type": "compiler_directive",
+          "named": true
+        },
+        {
+          "type": "enum_field",
           "named": true
         },
         {
           "type": "specified_directive",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "enum_field",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expressions",
           "named": true
         }
       ]
