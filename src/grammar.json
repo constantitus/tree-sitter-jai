@@ -6754,6 +6754,25 @@
             "type": "PREC",
             "value": 2,
             "content": {
+              "type": "STRING",
+              "value": "//"
+            }
+          },
+          {
+            "type": "PREC",
+            "value": 2,
+            "content": {
+              "type": "TOKEN",
+              "content": {
+                "type": "STRING",
+                "value": "//"
+              }
+            }
+          },
+          {
+            "type": "PREC",
+            "value": 2,
+            "content": {
               "type": "TOKEN",
               "content": {
                 "type": "STRING",
@@ -6876,6 +6895,21 @@
                 {
                   "type": "PATTERN",
                   "value": "U[0-9a-fA-F]{8}"
+                }
+              ]
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "TOKEN",
+                  "content": {
+                    "type": "STRING",
+                    "value": "//"
+                  }
+                },
+                {
+                  "type": "BLANK"
                 }
               ]
             }

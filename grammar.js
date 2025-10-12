@@ -1143,6 +1143,8 @@ module.exports = grammar({
 
         string_contents: $ => prec(2, choice(
             prec(2, /\s/), // This is so comments don't match inside a string.
+            prec(2, '//'),
+            prec(2, token('//')),
             prec(2, token('/*')),
             $.string_content,
             $.escape_sequence,
@@ -1172,6 +1174,7 @@ module.exports = grammar({
                 /u\{[0-9a-fA-F]+\}/,
                 /U[0-9a-fA-F]{8}/,
             ),
+            optional(token('//')), // This is so we can't have a comment right after an escape... dumb as fuck but whatever
         ))),
 
         identifier: _ => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
