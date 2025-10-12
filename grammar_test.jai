@@ -320,6 +320,7 @@ main :: () {
     (cast(#type (*void, s32) -> *void #c_call) function_pointer)(foo.bar, 1337);
 
     a : string = " \n// ";
+    a := "//";
 
     a :: #string END
 
