@@ -1135,17 +1135,18 @@ module.exports = grammar({
             $.string
         )),
 
-        string: $ => seq(
+        string: $ => prec(2, seq(
             token('"'),
             repeat($.string_contents),
             token('"'),
-        ),
+        )),
 
-        string_contents: $ => choice(
+        string_contents: $ => prec(2, choice(
+            prec(2, /\s/), // This is so comments don't match inside a string.
+            prec(2, token('/*')),
             $.string_content,
             $.escape_sequence,
-            prec(1, token('/*'))
-        ),
+        )),
 
         string_directive: $ => seq(
             field('directive', '#string'),
@@ -1159,7 +1160,7 @@ module.exports = grammar({
             prec(2, token(/[^\s]+/)),
             prec(2, token('/*'))
         ),
-        string_content: _ => prec(2, token.immediate(/[^"\\\n]+/)),
+        string_content: _ => prec(2, token(/[^"\\\n]+/)),
 
         escape_sequence: _ => prec(2, token.immediate(seq(
             '\\',

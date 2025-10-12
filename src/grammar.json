@@ -1632,10 +1632,6 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "run_or_insert_expression"
-        },
-        {
           "type": "SEQ",
           "members": [
             {
@@ -1672,6 +1668,10 @@
               "value": ";"
             }
           ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "run_or_insert_expression"
         }
       ]
     },
@@ -6707,54 +6707,70 @@
       }
     },
     "string": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "TOKEN",
-          "content": {
-            "type": "STRING",
-            "value": "\""
-          }
-        },
-        {
-          "type": "REPEAT",
-          "content": {
-            "type": "SYMBOL",
-            "name": "string_contents"
-          }
-        },
-        {
-          "type": "TOKEN",
-          "content": {
-            "type": "STRING",
-            "value": "\""
-          }
-        }
-      ]
-    },
-    "string_contents": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "string_content"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "escape_sequence"
-        },
-        {
-          "type": "PREC",
-          "value": 1,
-          "content": {
+      "type": "PREC",
+      "value": 2,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
             "type": "TOKEN",
             "content": {
               "type": "STRING",
-              "value": "/*"
+              "value": "\""
+            }
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SYMBOL",
+              "name": "string_contents"
+            }
+          },
+          {
+            "type": "TOKEN",
+            "content": {
+              "type": "STRING",
+              "value": "\""
             }
           }
-        }
-      ]
+        ]
+      }
+    },
+    "string_contents": {
+      "type": "PREC",
+      "value": 2,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "PREC",
+            "value": 2,
+            "content": {
+              "type": "PATTERN",
+              "value": "\\s"
+            }
+          },
+          {
+            "type": "PREC",
+            "value": 2,
+            "content": {
+              "type": "TOKEN",
+              "content": {
+                "type": "STRING",
+                "value": "/*"
+              }
+            }
+          },
+          {
+            "type": "SYMBOL",
+            "name": "string_content"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "escape_sequence"
+          }
+        ]
+      }
     },
     "string_directive": {
       "type": "SEQ",
@@ -6815,7 +6831,7 @@
       "type": "PREC",
       "value": 2,
       "content": {
-        "type": "IMMEDIATE_TOKEN",
+        "type": "TOKEN",
         "content": {
           "type": "PATTERN",
           "value": "[^\"\\\\\\n]+"
