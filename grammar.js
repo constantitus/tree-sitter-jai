@@ -1212,7 +1212,8 @@ module.exports = grammar({
 
         note: $ => token(prec(-1, seq('@', /[^\s;]+|"[^"\\\n]*"/))),
 
-        comment: _ => prec(1, token(seq('//', /([^*/\n]|[*][^/\n]|[/][^*\n])*/))),
+        comment: _ => prec(1, token(seq('//', /([^\n]|[*][^/\n]|[/][^*\n])*/))),
+        // comment: _ => prec(1, token(seq('//', /([^*/\n]|[*][^/\n]|[/][^*\n])*/))),
         // comment: _ => token(seq('//', /(\\+(.|\r?\n)|[^\\\n])*/)),
 
         block_comment: $ => seq(

@@ -23,7 +23,7 @@
    I will use this file to see if anything breaks as I add features or to fix bugs in
    the grammar. More cases will be added as it gets more complex.
 
- */
+*/
 
 test_proc0 :: () -> type, parameterized_struct_type(T), named_return := struct_literal.{} {}
 
@@ -313,6 +313,8 @@ main :: () {
         hello();
         return 0;
     };
+
+    // ariesntoianer */ "
 
     // parenthesised expression was conflicting with assignment_parameters
     (cast(#type (*void, s32) -> *void #c_call) function_pointer)(foo.bar, 1337);
