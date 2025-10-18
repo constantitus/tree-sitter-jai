@@ -6767,26 +6767,7 @@
             "value": 2,
             "content": {
               "type": "STRING",
-              "value": "/"
-            }
-          },
-          {
-            "type": "PREC",
-            "value": 2,
-            "content": {
-              "type": "STRING",
               "value": "//"
-            }
-          },
-          {
-            "type": "PREC",
-            "value": 2,
-            "content": {
-              "type": "TOKEN",
-              "content": {
-                "type": "STRING",
-                "value": "/"
-              }
             }
           },
           {

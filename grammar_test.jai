@@ -56,7 +56,8 @@ this is a strin
 "
 END;
 
-HEREDOC_STRING1 :: #string DONE on the same line DONE;
+HEREDOC_STRING1 :: #string DONE
+DONE;
 
 named_import :: #import "Named";
 

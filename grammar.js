@@ -1143,9 +1143,9 @@ module.exports = grammar({
 
         string_contents: $ => prec(2, choice(
             prec(2, /\s/), // This is so comments don't match inside a string.
-            prec(2, '/'),
+            // prec(2, '/'),
             prec(2, '//'),
-            prec(2, token('/')),
+            // prec(2, token('/')),
             prec(2, token('//')),
             prec(2, token('/*')),
             $.string_content,
