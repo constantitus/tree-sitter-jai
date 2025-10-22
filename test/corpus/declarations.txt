@@ -1,0 +1,291 @@
+================================================================================
+declarations without types
+================================================================================
+
+zero :: 0;
+one, two :: 1, 2;
+three, four, five :: 3, 4, 5;
+
+--------------------------------------------------------------------------------
+
+(source_file
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(const_declaration
+				(identifier)
+				(integer))))
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(const_declaration
+				(identifier)
+				(identifier)
+				(integer)
+				(integer))))
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(const_declaration
+				(identifier)
+				(identifier)
+				(identifier)
+				(integer)
+				(integer)
+				(integer)))))
+
+================================================================================
+declarations with types
+================================================================================
+
+zero :u8: 0;
+one, two :u16: 1, 2;
+three, four, five :u32: 3, 4, 5;
+
+--------------------------------------------------------------------------------
+
+(source_file
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(const_declaration
+				(identifier)
+				(types (identifier))
+				(integer))))
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(const_declaration
+				(identifier)
+				(identifier)
+				(types (identifier))
+				(integer)
+				(integer))))
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(const_declaration
+				(identifier)
+				(identifier)
+				(identifier)
+				(types (identifier))
+				(integer)
+				(integer)
+				(integer)))))
+
+================================================================================
+functions
+================================================================================
+
+test_proc0 :: () -> a {
+}
+
+test_proc1 :: (a: int, b :float= 123.56) -> c {
+}
+
+test_proc2 :: () -> m.t.t.t.t.t {
+}
+
+test_proc3 :: () -> type, parameterized_struct_type(T), named_return := struct_literal.{} {}
+
+--------------------------------------------------------------------------------
+
+(source_file
+	(top_level_declarations
+		(procedure_declaration
+			(identifier)
+			(procedure
+				(named_parameters)
+				(procedure_returns
+					(returns
+						(identifier_type
+							(identifier)))))
+			(block)))
+	(top_level_declarations
+		(procedure_declaration
+			(identifier)
+			(procedure
+				(named_parameters
+					(parameter
+						(identifier)
+						(types
+							(identifier)))
+					(parameter
+						(identifier)
+						(types
+							(identifier))
+						(float)))
+				(procedure_returns
+					(returns
+						(identifier_type
+							(identifier)))))
+			(block)))
+	(top_level_declarations
+		(procedure_declaration
+			(identifier)
+			(procedure
+				(named_parameters)
+				(procedure_returns
+					(returns
+						(member_type_in_procedure_returns
+							(member_type_in_procedure_returns
+								(member_type_in_procedure_returns
+									(member_type_in_procedure_returns
+										(member_type_in_procedure_returns
+											(identifier)
+											(identifier))
+										(identifier))
+									(identifier))
+								(identifier))
+							(identifier)))))
+			(block)))
+	(top_level_declarations
+		(procedure_declaration
+			(identifier)
+			(procedure
+				(named_parameters)
+				(procedure_returns
+					(returns
+						(identifier_type
+							(identifier)))
+					(returns
+						(types
+							(parameterized_struct_type
+								(identifier)
+								(assignment_parameters
+									(identifier)))))
+					(returns
+						(named_return
+							(identifier)
+							(types
+								(MISSING identifier))
+							(struct_literal
+								(identifier))))))
+			(block))))
+
+================================================================================
+structs
+================================================================================
+
+TestStruct1 :: struct {
+	#as using a : b;
+
+	var1 : int;
+	var3 := 0xDEAD_BEEF;
+	var4 : float32 = 0hAB_CD_12_34;
+	CONST1: string : "as if the string is going to fluctuate";
+	CONST2 :: -1_2_3_4_5_6_7_0;
+	CONST3 : int : #char "β";
+};
+
+TestStruct2 :: struct (type: Type = s64) {
+	union {
+		a: int;
+		b: float;
+	}
+
+	padding:   [120] u8;
+	rectangle: Rectangle #align 16;
+	next: *Test_Struct2;
+};
+
+a := TestStruct1.{};
+b := TestStruct2(69).{};
+
+--------------------------------------------------------------------------------
+
+(source_file
+	(top_level_declarations
+		(struct_declaration
+			(identifier)
+			(struct_or_union
+				(struct_or_union_block
+					(compiler_directive)
+					(using_statement
+						(statement
+							(declarations_that_require_a_semicolon
+								(variable_declaration
+									(identifier)
+									(types
+										(identifier))))))
+					(variable_declaration
+						(identifier)
+						(types
+							(identifier)))
+					(variable_declaration
+						(identifier)
+						(integer))
+					(variable_declaration
+						(identifier)
+						(types
+							(identifier))
+						(float))
+					(const_declaration
+						(identifier)
+						(types
+							(identifier))
+						(string
+							(string_contents
+								(string_content))))
+					(const_declaration
+						(identifier)
+						(unary_expression
+							(integer)))
+					(const_declaration
+						(identifier)
+						(types
+							(identifier))
+						(char_string
+							(string
+								(string_contents
+									(string_content)))))))))
+	(top_level_declarations
+		(struct_declaration
+			(identifier)
+			(struct_or_union
+				(named_parameters
+					(parameter
+						(identifier)
+						(types
+							(identifier))
+						(identifier)))
+				(struct_or_union_block
+					(struct_or_union
+						(struct_or_union_block
+							(variable_declaration
+								(identifier)
+								(types
+									(identifier)))
+							(variable_declaration
+								(identifier)
+								(types
+									(identifier)))))
+					(variable_declaration
+						(identifier)
+						(types
+							(array_type
+								(integer)
+								(identifier))))
+					(variable_declaration
+						(identifier)
+						(types
+							(identifier)))
+					(align_directive
+						(compiler_directive)
+						(integer))
+					(variable_declaration
+						(identifier)
+						(types
+							(pointer_type
+								(types
+									(identifier)))))))))
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(variable_declaration
+				(identifier)
+				(struct_literal
+					(identifier)))))
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(variable_declaration
+				(identifier)
+				(struct_literal
+					(types
+						(parameterized_struct_type
+							(identifier)
+							(assignment_parameters
+								(integer)))))))))
