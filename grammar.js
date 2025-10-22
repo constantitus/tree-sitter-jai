@@ -1183,9 +1183,9 @@ module.exports = grammar({
 
         integer: _ =>
             choice(
-                token(seq(choice("0b", "0B"), BIN_INT)),
-                token(seq(choice("0o", "0O"), OCT_INT)),
-                token(seq(choice("0x", "0X"), HEX_INT)),
+                token(seq('0', choice("b", "B"), optional('_'), BIN_INT)),
+                token(seq('0', choice("o", "O"), optional('_'), OCT_INT)),
+                token(seq('0', choice("x", "X"), optional('_'), HEX_INT)),
                 token(DEC_INT),
             ),
 

@@ -1,0 +1,62 @@
+================================================================================
+int literals
+================================================================================
+
+i1 :: 42;
+i2 :: 4_2;
+i3 :: 0600;
+i4 :: 0_600;
+i5 :: 0b101;
+i6 :: 0B101;
+i7 :: 0xBadFace;
+i8 :: 0xBad_Face;
+i9 :: 0x_67_7a_2f_cc_40_c6;
+
+--------------------------------------------------------------------------------
+
+(source_file
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(const_declaration
+				(identifier)
+				(integer))))
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(const_declaration
+				(identifier)
+				(integer))))
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(const_declaration
+				(identifier)
+				(integer))))
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(const_declaration
+				(identifier)
+				(integer))))
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(const_declaration
+				(identifier)
+				(integer))))
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(const_declaration
+				(identifier)
+				(integer))))
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(const_declaration
+				(identifier)
+				(integer))))
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(const_declaration
+				(identifier)
+				(integer))))
+	(top_level_declarations
+		(declarations_that_require_a_semicolon
+			(const_declaration
+				(identifier)
+				(integer)))))

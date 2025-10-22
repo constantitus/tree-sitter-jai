@@ -6942,15 +6942,31 @@
             "type": "SEQ",
             "members": [
               {
+                "type": "STRING",
+                "value": "0"
+              },
+              {
                 "type": "CHOICE",
                 "members": [
                   {
                     "type": "STRING",
-                    "value": "0b"
+                    "value": "b"
                   },
                   {
                     "type": "STRING",
-                    "value": "0B"
+                    "value": "B"
+                  }
+                ]
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "_"
+                  },
+                  {
+                    "type": "BLANK"
                   }
                 ]
               },
@@ -6996,15 +7012,31 @@
             "type": "SEQ",
             "members": [
               {
+                "type": "STRING",
+                "value": "0"
+              },
+              {
                 "type": "CHOICE",
                 "members": [
                   {
                     "type": "STRING",
-                    "value": "0o"
+                    "value": "o"
                   },
                   {
                     "type": "STRING",
-                    "value": "0O"
+                    "value": "O"
+                  }
+                ]
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "_"
+                  },
+                  {
+                    "type": "BLANK"
                   }
                 ]
               },
@@ -7050,15 +7082,31 @@
             "type": "SEQ",
             "members": [
               {
+                "type": "STRING",
+                "value": "0"
+              },
+              {
                 "type": "CHOICE",
                 "members": [
                   {
                     "type": "STRING",
-                    "value": "0x"
+                    "value": "x"
                   },
                   {
                     "type": "STRING",
-                    "value": "0X"
+                    "value": "X"
+                  }
+                ]
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "_"
+                  },
+                  {
+                    "type": "BLANK"
                   }
                 ]
               },
