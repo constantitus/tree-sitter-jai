@@ -5,7 +5,8 @@
       "camelcase": "Jai",
       "scope": "source.jai",
       "path": ".",
-      "file-types": null,
+      "file-types": ["jai"],
+      "highlights": "queries/highlights.scm",
       "injection-regex": "^jai$"
     }
   ],
