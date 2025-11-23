@@ -240,13 +240,16 @@ keyword: (identifier) @keyword
 [
   (block_comment)
   (comment)
-] @comment @spell
+] @spell
+
+[
+  (block_comment)
+  (comment)
+] @comment 
 
 ; Errors
 
 (ERROR) @error
-
-(block_comment) @comment
 
 directive: ("#") @keyword ; #if
 type: ("type_of") @type
