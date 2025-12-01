@@ -1672,6 +1672,14 @@
         {
           "type": "SYMBOL",
           "name": "run_or_insert_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "using_statement"
+        },
+        {
+          "type": "STRING",
+          "value": ";"
         }
       ]
     },

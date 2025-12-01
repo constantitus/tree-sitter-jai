@@ -392,6 +392,8 @@ module.exports = grammar({
                 ";"
             ),
             $.run_or_insert_expression,
+            $.using_statement,
+            ";",
         ),
           
         variable_declaration: $ => seq(

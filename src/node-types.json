@@ -859,7 +859,6 @@
   {
     "type": "block_comment",
     "named": true,
-    "extra": true,
     "fields": {},
     "children": {
       "multiple": true,
@@ -1083,7 +1082,6 @@
   {
     "type": "comment",
     "named": true,
-    "extra": true,
     "fields": {}
   },
   {
@@ -1289,10 +1287,14 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "expressions",
+          "named": true
+        },
+        {
+          "type": "using_statement",
           "named": true
         }
       ]
