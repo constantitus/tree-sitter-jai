@@ -6,7 +6,7 @@ I don't actively maintain this anymore. I'll just be merging pull requests for n
 really write a simpler one, this is pretty much a mess.
 
 
-For anyone who wants to start writing one from scratch, here's some things to consider:
+For anyone who wants to start writing one from scratch, here are some things to consider:
 - The biggest one would be split identifiers (e.g. `this_is_split_for\   _alignment`), which are present
 pretty much everywhere in the modules shipped with the compiler. To parse them, you have to do it in `scanner.c`.
 And if you parse them in C, you have to handle all keywords (and perhaps the compiler declarations) in
