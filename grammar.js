@@ -63,7 +63,7 @@ module.exports = grammar({
 
         [$.member_expression, $.types, $.member_type, $.struct_literal, $.array_literal],
 
-        [$.top_level_declarations, $.call_expression],
+        // [$.top_level_declarations, $.call_expression],
         [$.identifier_type, $.types, $.parameterized_struct_type],
         [$.expressions, $.identifier_type, $.assignment_parameters, $.types],
         [$.identifier_type, $.named_return, $.types],
@@ -97,9 +97,9 @@ module.exports = grammar({
     word: $ => $.identifier,
 
     rules: {
-        source_file: $ => repeat(seq($.top_level_declarations, optional(';'))),
+        source_file: $ => repeat(seq($.statement, optional(';'))),
 
-        top_level_declarations: $ => choice(
+        /* top_level_declarations: $ => choice(
             $.procedure_declaration,
             $.struct_declaration,
             $.enum_declaration,
@@ -112,9 +112,10 @@ module.exports = grammar({
             $.module_parameters,
             seq($.compiler_directive, $.string),
             seq($.declarations_that_require_a_semicolon, ';'),
-        ),
+        ), */
 
         declarations_that_require_a_semicolon: $ => choice(
+            $.module_parameters,
             $.assert_statement,
             $.placeholder_declaration,
             $.const_declaration,
@@ -136,6 +137,7 @@ module.exports = grammar({
             $.compiler_directive,
             $.run_statement,
             $.asm_statement,
+            $.import_or_load,
 
             // Only in procedures
             $.backtick_statement,
@@ -163,6 +165,8 @@ module.exports = grammar({
 
             $.declarations_that_require_a_semicolon,
         ),
+
+        import_or_load: $ => seq($.compiler_directive, $.string),
 
         statements_that_dont_require_a_semicolon: $ => choice(
             $.block,
@@ -293,12 +297,12 @@ module.exports = grammar({
             field('path', $.string),
         ),
 
-        module_parameters: $ => prec.right(seq(
+        module_parameters: $ => seq(
             alias(field('directive', '#module_parameters'), $.compiler_directive),
             $.named_parameters,
             optional($.named_parameters),
             optional($.block),
-        )),
+        ),
 
         procedure_declaration: $ => prec(1, seq(
             field('name', choice(

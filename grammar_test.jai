@@ -83,7 +83,7 @@ TestStruct1 :: struct {
     CONST2 :: -1_2_3_4_5_6_7_0;
     CONST3 : int : #char "β";
     // I'll add as I encounter more issues
-};
+}
 
 TestStruct2 :: struct (type: Type = s64) {
     union {
@@ -94,7 +94,7 @@ TestStruct2 :: struct (type: Type = s64) {
     padding:   [120] u8;
     rectangle: Rectangle #align 16;
     next: *Test_Struct2;
-};
+}
 
 TestEnum :: enum { A; B; }
 test_enum: enum {
@@ -145,8 +145,8 @@ main :: () {
 
     // Structs and parameterized structs
 
-    struct_literal1 := TestStruct1.{};
-    struct_literal2 := TestStruct2(69).{};
+    struct_literal1 := TestStruct1.{}
+    struct_literal2 := TestStruct2(69).{}
 
     //        Parameterized struct type
     struct1 : TestStruct2(420, 540, 999, "perhaps") = .{420, 540, 999, "perhaps"};

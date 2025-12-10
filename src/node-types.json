@@ -56,6 +56,10 @@
         "named": true
       },
       {
+        "type": "import_or_load",
+        "named": true
+      },
+      {
         "type": "procedure_declaration",
         "named": true
       },
@@ -1196,6 +1200,10 @@
           "named": true
         },
         {
+          "type": "module_parameters",
+          "named": true
+        },
+        {
           "type": "placeholder_declaration",
           "named": true
         },
@@ -1651,6 +1659,25 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "import_or_load",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "compiler_directive",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -2783,7 +2810,7 @@
       "required": false,
       "types": [
         {
-          "type": "top_level_declarations",
+          "type": "statement",
           "named": true
         }
       ]
@@ -3166,57 +3193,6 @@
       "types": [
         {
           "type": "compiler_directive",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "top_level_declarations",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "compiler_directive",
-          "named": true
-        },
-        {
-          "type": "declarations_that_require_a_semicolon",
-          "named": true
-        },
-        {
-          "type": "enum_declaration",
-          "named": true
-        },
-        {
-          "type": "module_parameters",
-          "named": true
-        },
-        {
-          "type": "procedure_declaration",
-          "named": true
-        },
-        {
-          "type": "run_statement",
-          "named": true
-        },
-        {
-          "type": "static_if_statement",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "struct_declaration",
-          "named": true
-        },
-        {
-          "type": "using_statement",
           "named": true
         }
       ]

@@ -1,10 +1,16 @@
 # tree-sitter-jai
-Tree-sitter grammar for the language. It is incomplete.
+Tree-sitter grammar for the language.
 
-# TODO
-*I prioritize fixing issues based on how badly they break the parsing*
-- [x] here strings (external scanner)
-- [ ] simplify the grammar so the parser generates faster and is more lightweight
-- [ ] there are some situations inside else blocks where indenting is ignored and the user has to do it manually, I need to fix those
-- [ ] implement splitting identifiers (e.g. `ident\     ifier`)
-- [ ] there's no way diferentiate between taking the address of a variable and a pointer type (does not break the syntax highlighting or indents, so I don't really care)
+
+I don't actively maintain this anymore. For now, I'll be merging pull requests for now, but someone should
+really write a simpler one, this is pretty much a mess.
+
+
+For anyone who wants to start writing one from scratch, here's some things to consider:
+- The biggest one would be split identifiers (e.g. `this_is_split_for\   _alignment`), which are present
+pretty much everywhere in the modules shipped with the compiler. To parse them, you have to do it in `scanner.c`.
+And if you parse them in C, you also have to handle all keywords (and perhaps the compiler declarations) in
+C as well.
+- It should also be simpler. For the purpose of angry fruit salad highlighting, this should be more of a
+lexer with minimal context awareness rather than a full blown parser. This is especially true for a language
+that is still in beta and is constantly changing it's syntax or adding/removing features.

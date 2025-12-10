@@ -10,7 +10,7 @@
         "members": [
           {
             "type": "SYMBOL",
-            "name": "top_level_declarations"
+            "name": "statement"
           },
           {
             "type": "CHOICE",
@@ -27,72 +27,13 @@
         ]
       }
     },
-    "top_level_declarations": {
+    "declarations_that_require_a_semicolon": {
       "type": "CHOICE",
       "members": [
-        {
-          "type": "SYMBOL",
-          "name": "procedure_declaration"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "struct_declaration"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "enum_declaration"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "static_if_statement"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "run_statement"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "compiler_directive"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "using_statement"
-        },
         {
           "type": "SYMBOL",
           "name": "module_parameters"
         },
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "compiler_directive"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "string"
-            }
-          ]
-        },
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "declarations_that_require_a_semicolon"
-            },
-            {
-              "type": "STRING",
-              "value": ";"
-            }
-          ]
-        }
-      ]
-    },
-    "declarations_that_require_a_semicolon": {
-      "type": "CHOICE",
-      "members": [
         {
           "type": "SYMBOL",
           "name": "assert_statement"
@@ -174,6 +115,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "import_or_load"
+        },
+        {
+          "type": "SYMBOL",
           "name": "backtick_statement"
         },
         {
@@ -243,6 +188,19 @@
         {
           "type": "SYMBOL",
           "name": "declarations_that_require_a_semicolon"
+        }
+      ]
+    },
+    "import_or_load": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "compiler_directive"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "string"
         }
       ]
     },
@@ -943,54 +901,50 @@
       ]
     },
     "module_parameters": {
-      "type": "PREC_RIGHT",
-      "value": 0,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "ALIAS",
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "FIELD",
+            "name": "directive",
             "content": {
-              "type": "FIELD",
-              "name": "directive",
-              "content": {
-                "type": "STRING",
-                "value": "#module_parameters"
-              }
+              "type": "STRING",
+              "value": "#module_parameters"
+            }
+          },
+          "named": true,
+          "value": "compiler_directive"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "named_parameters"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "named_parameters"
             },
-            "named": true,
-            "value": "compiler_directive"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "named_parameters"
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "named_parameters"
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "block"
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
-          }
-        ]
-      }
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "block"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
     },
     "procedure_declaration": {
       "type": "PREC",
@@ -7865,10 +7819,6 @@
       "member_type",
       "struct_literal",
       "array_literal"
-    ],
-    [
-      "top_level_declarations",
-      "call_expression"
     ],
     [
       "identifier_type",
