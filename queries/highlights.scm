@@ -116,7 +116,11 @@ named_argument: (identifier) @variable
 
 type: (types) @type
 type: (identifier) @type
-((types) @type)
+
+; Slightly increase the priority so types like `[5] int` and `*float` render fully as types
+; rather than punctuation.bracket + type or operator + type, respectively
+((types) @type
+         (#set! "priority" 105))
 
 modifier: (identifier) @keyword
 keyword: (identifier) @keyword
