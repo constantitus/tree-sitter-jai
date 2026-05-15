@@ -1328,7 +1328,7 @@
         }
       ]
     },
-    "tagged_union_field": {
+    "tagged_union_binding": {
       "type": "SEQ",
       "members": [
         {
@@ -1451,7 +1451,7 @@
                     },
                     {
                       "type": "SYMBOL",
-                      "name": "tagged_union_field"
+                      "name": "tagged_union_binding"
                     },
                     {
                       "type": "STRING",

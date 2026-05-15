@@ -251,7 +251,7 @@ keyword: (identifier) @keyword
 
 (tagged_union_kind name: (identifier) @keyword)
 
-(tagged_union_field tag: (identifier) @constant)
+(tagged_union_binding tag: (identifier) @constant)
 
 ",," @operator
 

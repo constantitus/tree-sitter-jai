@@ -350,7 +350,7 @@ module.exports = grammar({
             field('type', $.types),
         ),
 
-        tagged_union_field: $ => seq(
+        tagged_union_binding: $ => seq(
             '.',
             field('tag', $.identifier),
             ',,',
@@ -374,7 +374,7 @@ module.exports = grammar({
                 $.struct_or_union,
                 $.static_if_statement,
                 $.using_statement,
-                $.tagged_union_field,
+                $.tagged_union_binding,
                 ';',
                 seq(
                     choice(
