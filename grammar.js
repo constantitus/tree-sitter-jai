@@ -337,10 +337,28 @@ module.exports = grammar({
         struct_or_union: $ => seq(
             choice('struct', 'union'),
             optional($.compiler_directive),
+            optional($.tagged_union_kind),
             // Parameterized structs
             field('modifier', optional($.named_parameters)),
             optional($.modify_block),
             $.struct_or_union_block,
+        ),
+
+        tagged_union_kind: $ => seq(
+            field('name', $.identifier),
+            ':',
+            field('type', $.types),
+        ),
+
+        tagged_union_binding: $ => seq(
+            '.',
+            field('tag', $.identifier),
+            ',,',
+            optional(seq(
+                $.variable_declaration,
+                optional($.align_directive),
+            )),
+            ';',
         ),
 
         struct_or_union_block: $ => prec.left(seq(
@@ -356,11 +374,12 @@ module.exports = grammar({
                 $.struct_or_union,
                 $.static_if_statement,
                 $.using_statement,
+                $.tagged_union_binding,
                 ';',
                 seq(
                     choice(
                         $.insert_statement,
-                        $.const_declaration,   
+                        $.const_declaration,
                         $.assignment_statement,
                         $.variable_declaration,
                         $.place_directive,
@@ -1035,6 +1054,7 @@ module.exports = grammar({
             //  variable : struct {} = .{};
             choice('struct', 'union'),
             optional($.compiler_directive),
+            optional($.tagged_union_kind),
 
             // Also valid in terms that the compiler will not complain, but
             // useless since you cannot put anything inside the parentheses:

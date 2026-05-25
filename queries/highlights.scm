@@ -247,6 +247,14 @@ keyword: (identifier) @keyword
   (comment)
 ] @comment 
 
+; Tagged unions
+
+(tagged_union_kind name: (identifier) @keyword)
+
+(tagged_union_binding tag: (identifier) @constant)
+
+",," @operator
+
 ; Errors
 
 (ERROR) @error
