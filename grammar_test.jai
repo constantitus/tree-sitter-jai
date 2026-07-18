@@ -96,6 +96,13 @@ TestStruct2 :: struct (type: Type = s64) {
     next: *Test_Struct2;
 }
 
+TestStruct3 :: struct {
+    a: struct {
+        b: int;
+    }
+    c: float;
+}
+
 TestEnum :: enum { A; B; }
 test_enum: enum {
     A;
@@ -147,6 +154,7 @@ main :: () {
 
     struct_literal1 := TestStruct1.{}
     struct_literal2 := TestStruct2(69).{}
+    struct_literal3 := TestStruct3.{ a.b = 420, c = 1337 }
 
     //        Parameterized struct type
     struct1 : TestStruct2(420, 540, 999, "perhaps") = .{420, 540, 999, "perhaps"};

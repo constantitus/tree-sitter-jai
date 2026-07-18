@@ -1121,7 +1121,8 @@ module.exports = grammar({
                     optional(seq(field('name',
                         choice(
                             $.identifier,
-                            $.index_expression // maybe there are more cases like this
+                            $.index_expression, // maybe there are more cases like this
+                            $.member_expression // support cases like foo.bar = ...
                         )
                     ), '=')), // named
                     $.expressions,

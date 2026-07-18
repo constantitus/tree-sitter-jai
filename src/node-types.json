@@ -3008,6 +3008,10 @@
           {
             "type": "index_expression",
             "named": true
+          },
+          {
+            "type": "member_expression",
+            "named": true
           }
         ]
       },
