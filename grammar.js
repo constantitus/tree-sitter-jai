@@ -71,6 +71,10 @@ module.exports = grammar({
 
         [$.member_type_in_procedure_returns, $.identifier_type, $.types, $.member_type],
 
+        // 'Foo' vs 'Foo.Bar' as a type, and '[]Foo.{}' vs '[]Foo.Bar'.
+        [$.types, $.member_type],
+        [$.expressions, $.member_expression, $.types, $.member_type, $.struct_literal, $.array_literal],
+
         [$.parenthesized_expression, $.assignment_parameters],
     ],
 
@@ -1026,7 +1030,12 @@ module.exports = grammar({
             prec(-2, $.identifier),
         )),
 
-        member_type: $ => prec(-1, seq($.identifier, '.', $.identifier)),
+        // Same precedence as the bare identifier in 'types' above
+        // After an identifier, a '.' is ambiguous with only one token of lookahead:
+        //   []Foo.{}    the '.' opens a struct literal, so the type ends at Foo
+        //   []Foo.Bar   the '.' continues the type
+		// This will result in this case becoming a conflict, which will be resolved
+        member_type: $ => prec(-2, seq($.identifier, '.', $.identifier)),
 
         polymorphic_type: $ => seq(
             optional('$'),
@@ -1081,10 +1090,7 @@ module.exports = grammar({
             '[',
             optional(seq(choice('..', $.expressions))),
             ']',
-            optional(choice(
-                field('type', $.types),
-                field('type', $.identifier)
-            )),
+            optional(field('type', $.types)),
         )),
 
         //

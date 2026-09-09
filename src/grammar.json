@@ -5962,7 +5962,7 @@
     },
     "member_type": {
       "type": "PREC",
-      "value": -1,
+      "value": -2,
       "content": {
         "type": "SEQ",
         "members": [
@@ -6291,25 +6291,12 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "FIELD",
-                    "name": "type",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "types"
-                    }
-                  },
-                  {
-                    "type": "FIELD",
-                    "name": "type",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "identifier"
-                    }
-                  }
-                ]
+                "type": "FIELD",
+                "name": "type",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "types"
+                }
               },
               {
                 "type": "BLANK"
@@ -7959,6 +7946,18 @@
       "identifier_type",
       "types",
       "member_type"
+    ],
+    [
+      "types",
+      "member_type"
+    ],
+    [
+      "expressions",
+      "member_expression",
+      "types",
+      "member_type",
+      "struct_literal",
+      "array_literal"
     ],
     [
       "parenthesized_expression",
