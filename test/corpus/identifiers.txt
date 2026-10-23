@@ -1,0 +1,108 @@
+================================================================================
+split identifier on a declaration
+================================================================================
+
+this_is_split_for\   _alignment :: 1;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (const_declaration
+        (identifier)
+        (integer)))))
+
+================================================================================
+split identifier across lines
+================================================================================
+
+foo\
+    bar := 2;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (integer)))))
+
+================================================================================
+split identifier in an expression
+================================================================================
+
+x := a\  b + c;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (binary_expression
+          (identifier)
+          (identifier))))))
+
+================================================================================
+split identifier in calls and members
+================================================================================
+
+q :: () {
+    r\   s(1);
+    t.u\ v = 3;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (assignment_parameters))
+      (block
+        (statement
+          (call_expression
+            (identifier)
+            (assignment_parameters
+              (integer))))
+        (statement
+          (assignment_statement
+            (member_expression
+              (identifier)
+              (identifier))
+            (integer)))))))
+
+================================================================================
+split identifier with several splits
+================================================================================
+
+a\ b\  c\
+  d :: 1;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (const_declaration
+        (identifier)
+        (integer)))))
+
+================================================================================
+keyword prefix is still an identifier
+================================================================================
+
+iffy := format\ ted;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (identifier)))))

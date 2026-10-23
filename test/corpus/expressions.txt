@@ -1,0 +1,421 @@
+================================================================================
+arithmetic precedence
+================================================================================
+
+x := 1 + 2 * 3 - 4 / 2;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (binary_expression
+          (binary_expression
+            (integer)
+            (binary_expression
+              (integer)
+              (integer)))
+          (binary_expression
+            (integer)
+            (integer)))))))
+
+================================================================================
+comparison and logic
+================================================================================
+
+x := a < b && c >= d || !e;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (binary_expression
+          (binary_expression
+            (binary_expression
+              (identifier)
+              (identifier))
+            (binary_expression
+              (identifier)
+              (identifier)))
+          (unary_expression
+            (identifier)))))))
+
+================================================================================
+bitwise and shifts
+================================================================================
+
+x := (a | b) & (c ^ d);
+y := a << 2;
+z := a >> 1;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (binary_expression
+          (parenthesized_expression
+            (binary_expression
+              (identifier)
+              (identifier)))
+          (parenthesized_expression
+            (binary_expression
+              (identifier)
+              (identifier)))))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (binary_expression
+          (identifier)
+          (integer)))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (binary_expression
+          (identifier)
+          (integer))))))
+
+================================================================================
+cast
+================================================================================
+
+x := cast(s32) y;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (cast_expression
+          (types
+            (identifier))
+          (identifier))))))
+
+================================================================================
+cast with modifier
+================================================================================
+
+x := cast,trunc(u8) y;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (cast_expression
+          (identifier)
+          (types
+            (identifier))
+          (identifier))))))
+
+================================================================================
+auto cast
+================================================================================
+
+x: s64 = xx y;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (types
+          (identifier))
+        (auto_cast_expression
+          (identifier))))))
+
+================================================================================
+address and dereference
+================================================================================
+
+p := *x;
+y := <<p;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (address
+          (identifier)))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (pointer_expression
+          (identifier))))))
+
+================================================================================
+indexing
+================================================================================
+
+x := array[i + 1];
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (index_expression
+          (identifier)
+          (binary_expression
+            (identifier)
+            (integer)))))))
+
+================================================================================
+member access chain
+================================================================================
+
+x := a.b.c.d;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (member_expression
+          (member_expression
+            (member_expression
+              (identifier)
+              (identifier))
+            (identifier))
+          (identifier))))))
+
+================================================================================
+call with named arguments
+================================================================================
+
+foo(1, name = 2, flag = true);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (call_expression
+      (identifier)
+      (assignment_parameters
+        (integer)
+        (identifier)
+        (integer)
+        (identifier)
+        (boolean)))))
+
+================================================================================
+nested calls
+================================================================================
+
+x := foo(bar(1), baz(2, 3));
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (call_expression
+          (identifier)
+          (assignment_parameters
+            (call_expression
+              (identifier)
+              (assignment_parameters
+                (integer)))
+            (call_expression
+              (identifier)
+              (assignment_parameters
+                (integer)
+                (integer)))))))))
+
+================================================================================
+ifx
+================================================================================
+
+x := ifx a > b then a else b;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (if_expression
+          (binary_expression
+            (identifier)
+            (identifier))
+          (identifier)
+          (identifier))))))
+
+================================================================================
+type_of
+================================================================================
+
+x : type_of(y) = 1;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (types
+          (type_of_expression
+            (identifier)))
+        (integer)))))
+
+================================================================================
+quick procedure
+================================================================================
+
+f := (x) => x + 1;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (quick_procedure
+          (assignment_parameters
+            (identifier))
+          (binary_expression
+            (identifier)
+            (integer)))))))
+
+================================================================================
+struct literal
+================================================================================
+
+v := Vector3.{1, 2, 3};
+w := Vector3.{x = 1, y = 2};
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (struct_literal
+          (identifier)
+          (integer)
+          (integer)
+          (integer)))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (struct_literal
+          (identifier)
+          (identifier)
+          (integer)
+          (identifier)
+          (integer))))))
+
+================================================================================
+array literal
+================================================================================
+
+a := int.[1, 2, 3];
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (array_literal
+          (identifier)
+          (integer)
+          (integer)
+          (integer))))))
+
+================================================================================
+compound assignment
+================================================================================
+
+main :: () {
+    a += 1;
+    b -= 2;
+    c *= 3;
+    d /= 4;
+    e <<= 1;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (assignment_parameters))
+      (block
+        (statement
+          (update_statement
+            (identifier)
+            (integer)))
+        (statement
+          (update_statement
+            (identifier)
+            (integer)))
+        (statement
+          (update_statement
+            (identifier)
+            (integer)))
+        (statement
+          (update_statement
+            (identifier)
+            (integer)))
+        (statement
+          (update_statement
+            (identifier)
+            (integer)))))))
+
+================================================================================
+multiple assignment
+================================================================================
+
+main :: () {
+    a, b = b, a;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (assignment_parameters))
+      (block
+        (statement
+          (assignment_statement
+            (identifier)
+            (identifier)
+            (identifier)
+            (identifier)))))))

@@ -60,3 +60,210 @@ i9 :: 0x_67_7a_2f_cc_40_c6;
 			(const_declaration
 				(identifier)
 				(integer)))))
+
+================================================================================
+floats
+================================================================================
+
+a := 1.0;
+b := 1.5e10;
+c := .5;
+d := 2.0e-3;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (float))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (float))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (float))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (float)))))
+
+================================================================================
+hex octal binary
+================================================================================
+
+a := 0xFF;
+b := 0o17;
+c := 0b1010;
+d := 1_000_000;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (integer))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (integer))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (integer))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (integer)))))
+
+================================================================================
+hex float
+================================================================================
+
+a := 0x1.8p1;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (float)))))
+
+================================================================================
+strings with escapes
+================================================================================
+
+s := "line\n\ttab \"quoted\" \\ backslash";
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (string
+          (string_contents
+            (string_content))
+          (string_contents
+            (escape_sequence))
+          (string_contents
+            (escape_sequence))
+          (string_contents
+            (string_content))
+          (string_contents
+            (escape_sequence))
+          (string_contents
+            (string_content))
+          (string_contents
+            (escape_sequence))
+          (string_contents)
+          (string_contents
+            (escape_sequence))
+          (string_contents
+            (string_content)))))))
+
+================================================================================
+string with comment markers
+================================================================================
+
+s := "not // a comment /* either */";
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (string
+          (string_contents
+            (string_content)))))))
+
+================================================================================
+booleans and null
+================================================================================
+
+a := true;
+b := false;
+c: *int = null;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (boolean))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (boolean))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (types
+          (pointer_type
+            (types
+              (identifier))))
+        (null)))))
+
+================================================================================
+heredoc
+================================================================================
+
+s :: #string END
+some text
+more text
+END;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (const_declaration
+        (identifier)
+        (string_directive
+          (heredoc_start)
+          (heredoc_body)
+          (heredoc_body)
+          (heredoc_body)
+          (heredoc_body)
+          (heredoc_end))))))
+
+================================================================================
+line comments
+================================================================================
+
+// first
+x :: 1; // trailing
+// last
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (statement
+    (declarations_that_require_a_semicolon
+      (const_declaration
+        (identifier)
+        (integer))))
+  (comment)
+  (comment))

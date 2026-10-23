@@ -1,0 +1,447 @@
+================================================================================
+if else
+================================================================================
+
+main :: () {
+    if x == 1 {
+        y = 2;
+    } else if x == 2 {
+        y = 3;
+    } else {
+        y = 4;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (assignment_parameters))
+      (block
+        (statement
+          (if_statement
+            (if_statement_condition_and_consequence
+              (if_condition
+                (binary_expression
+                  (identifier)
+                  (integer)))
+              (statement
+                (block
+                  (statement
+                    (assignment_statement
+                      (identifier)
+                      (integer)))))
+              (else_clause
+                (statement
+                  (if_statement
+                    (if_statement_condition_and_consequence
+                      (if_condition
+                        (binary_expression
+                          (identifier)
+                          (integer)))
+                      (statement
+                        (block
+                          (statement
+                            (assignment_statement
+                              (identifier)
+                              (integer)))))
+                      (else_clause
+                        (statement
+                          (block
+                            (statement
+                              (assignment_statement
+                                (identifier)
+                                (integer)))))))))))))))))
+
+================================================================================
+if then
+================================================================================
+
+main :: () {
+    if x then y = 1;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (assignment_parameters))
+      (block
+        (statement
+          (if_statement
+            (if_statement_condition_and_consequence
+              (if_condition
+                (identifier))
+              (statement
+                (assignment_statement
+                  (identifier)
+                  (integer))))))))))
+
+================================================================================
+while
+================================================================================
+
+main :: () {
+    while i < 10 {
+        i += 1;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (assignment_parameters))
+      (block
+        (statement
+          (while_statement
+            (binary_expression
+              (identifier)
+              (integer))
+            (statement
+              (block
+                (statement
+                  (update_statement
+                    (identifier)
+                    (integer)))))))))))
+
+================================================================================
+for range
+================================================================================
+
+main :: () {
+    for 0..9 {
+        print("%\n", it);
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (assignment_parameters))
+      (block
+        (statement
+          (for_statement
+            (integer)
+            (integer)
+            (statement
+              (block
+                (statement
+                  (call_expression
+                    (identifier)
+                    (assignment_parameters
+                      (string
+                        (string_contents
+                          (string_content))
+                        (string_contents
+                          (escape_sequence)))
+                      (identifier))))))))))))
+
+================================================================================
+for named iterator
+================================================================================
+
+main :: () {
+    for i: 0..9 {
+        sum += i;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (assignment_parameters))
+      (block
+        (statement
+          (for_statement
+            (identifier)
+            (integer)
+            (integer)
+            (statement
+              (block
+                (statement
+                  (update_statement
+                    (identifier)
+                    (identifier)))))))))))
+
+================================================================================
+for array with index
+================================================================================
+
+main :: () {
+    for value, index: array {
+        sum += value;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (assignment_parameters))
+      (block
+        (statement
+          (for_statement
+            (identifier)
+            (identifier)
+            (identifier)
+            (statement
+              (block
+                (statement
+                  (update_statement
+                    (identifier)
+                    (identifier)))))))))))
+
+================================================================================
+for pointer and reverse
+================================================================================
+
+main :: () {
+    for *item: items {
+        item.x = 1;
+    }
+    for < items {
+        remove it;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (assignment_parameters))
+      (block
+        (statement
+          (for_statement
+            (identifier)
+            (identifier)
+            (statement
+              (block
+                (statement
+                  (assignment_statement
+                    (member_expression
+                      (identifier)
+                      (identifier))
+                    (integer)))))))
+        (statement
+          (for_statement
+            (identifier)
+            (statement
+              (block
+                (statement
+                  (remove_statement
+                    (identifier)))))))))))
+
+================================================================================
+break continue
+================================================================================
+
+main :: () {
+    while true {
+        if a  break;
+        if b  continue;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (assignment_parameters))
+      (block
+        (statement
+          (while_statement
+            (boolean)
+            (statement
+              (block
+                (statement
+                  (if_statement
+                    (if_statement_condition_and_consequence
+                      (if_condition
+                        (identifier))
+                      (statement
+                        (break_statement)))))
+                (statement
+                  (if_statement
+                    (if_statement_condition_and_consequence
+                      (if_condition
+                        (identifier))
+                      (statement
+                        (continue_statement)))))))))))))
+
+================================================================================
+defer and return
+================================================================================
+
+main :: () -> int {
+    defer free(p);
+    return 1;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (named_parameters)
+        (procedure_returns
+          (returns
+            (identifier_type
+              (identifier)))))
+      (block
+        (statement
+          (defer_statement
+            (statement
+              (call_expression
+                (identifier)
+                (assignment_parameters
+                  (identifier))))))
+        (statement
+          (return_statement
+            (integer)))))))
+
+================================================================================
+multiple return values
+================================================================================
+
+main :: () -> int, bool {
+    return 1, true;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (named_parameters)
+        (procedure_returns
+          (returns
+            (identifier_type
+              (identifier)))
+          (returns
+            (identifier_type
+              (identifier)))))
+      (block
+        (statement
+          (return_statement
+            (integer)
+            (boolean)))))))
+
+================================================================================
+switch case
+================================================================================
+
+main :: () {
+    if x == {
+        case 1;
+            y = 1;
+        case 2;
+            y = 2;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (assignment_parameters))
+      (block
+        (statement
+          (if_statement
+            (if_case_statement
+              (identifier)
+              (switch_case
+                (integer)
+                (statement
+                  (assignment_statement
+                    (identifier)
+                    (integer))))
+              (switch_case
+                (integer)
+                (statement
+                  (assignment_statement
+                    (identifier)
+                    (integer)))))))))))
+
+================================================================================
+push context
+================================================================================
+
+main :: () {
+    push_context ctx {
+        work();
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (assignment_parameters))
+      (block
+        (statement
+          (push_context_statement
+            (identifier)
+            (block
+              (statement
+                (call_expression
+                  (identifier)
+                  (assignment_parameters))))))))))
+
+================================================================================
+using
+================================================================================
+
+main :: () {
+    using foo;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (assignment_parameters))
+      (block
+        (statement
+          (using_statement
+            (statement
+              (identifier))))))))

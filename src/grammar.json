@@ -1,7 +1,7 @@
 {
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
   "name": "jai",
-  "word": "identifier",
+  "word": "_identifier_word",
   "rules": {
     "source_file": {
       "type": "REPEAT",
@@ -159,10 +159,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "defer_statement"
-        },
-        {
-          "type": "SYMBOL",
           "name": "return_statement"
         },
         {
@@ -261,11 +257,49 @@
         },
         {
           "type": "SYMBOL",
+          "name": "defer_statement"
+        },
+        {
+          "type": "SYMBOL",
           "name": "push_context_statement"
         },
         {
           "type": "SYMBOL",
           "name": "no_semicolon_declaration"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "TOKEN",
+            "content": {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "#"
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "scope_file"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "scope_module"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "scope_export"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "named": true,
+          "value": "compiler_directive"
         }
       ]
     },
@@ -1393,123 +1427,115 @@
             "value": "{"
           },
           {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "REPEAT",
-                "content": {
-                  "type": "CHOICE",
+            "type": "REPEAT",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "FIELD",
+                    "name": "directive",
+                    "content": {
+                      "type": "STRING",
+                      "value": "#as"
+                    }
+                  },
+                  "named": true,
+                  "value": "compiler_directive"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "run_or_insert_expression"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "run_statement"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "procedure_declaration"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "struct_declaration"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "enum_declaration"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "no_semicolon_declaration"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "struct_or_union"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "static_if_statement"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "using_statement"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "tagged_union_binding"
+                },
+                {
+                  "type": "STRING",
+                  "value": ";"
+                },
+                {
+                  "type": "SEQ",
                   "members": [
                     {
-                      "type": "ALIAS",
-                      "content": {
-                        "type": "FIELD",
-                        "name": "directive",
-                        "content": {
-                          "type": "STRING",
-                          "value": "#as"
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SYMBOL",
+                          "name": "insert_statement"
+                        },
+                        {
+                          "type": "SYMBOL",
+                          "name": "const_declaration"
+                        },
+                        {
+                          "type": "SYMBOL",
+                          "name": "assignment_statement"
+                        },
+                        {
+                          "type": "SYMBOL",
+                          "name": "variable_declaration"
+                        },
+                        {
+                          "type": "SYMBOL",
+                          "name": "place_directive"
                         }
-                      },
-                      "named": true,
-                      "value": "compiler_directive"
+                      ]
                     },
                     {
-                      "type": "SYMBOL",
-                      "name": "run_or_insert_expression"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "run_statement"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "procedure_declaration"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "struct_declaration"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "enum_declaration"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "no_semicolon_declaration"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "struct_or_union"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "static_if_statement"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "using_statement"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "tagged_union_binding"
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SYMBOL",
+                          "name": "align_directive"
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
                     },
                     {
                       "type": "STRING",
                       "value": ";"
-                    },
-                    {
-                      "type": "SEQ",
-                      "members": [
-                        {
-                          "type": "CHOICE",
-                          "members": [
-                            {
-                              "type": "SYMBOL",
-                              "name": "insert_statement"
-                            },
-                            {
-                              "type": "SYMBOL",
-                              "name": "const_declaration"
-                            },
-                            {
-                              "type": "SYMBOL",
-                              "name": "assignment_statement"
-                            },
-                            {
-                              "type": "SYMBOL",
-                              "name": "variable_declaration"
-                            },
-                            {
-                              "type": "SYMBOL",
-                              "name": "place_directive"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "CHOICE",
-                          "members": [
-                            {
-                              "type": "SYMBOL",
-                              "name": "align_directive"
-                            },
-                            {
-                              "type": "BLANK"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "STRING",
-                          "value": ";"
-                        }
-                      ]
                     }
                   ]
                 }
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
+              ]
+            }
           },
           {
             "type": "STRING",
@@ -2630,19 +2656,6 @@
           "name": "asm_register"
         }
       ]
-    },
-    "asm_size": {
-      "type": "PREC",
-      "value": 999,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "asm_size_or_register"
-          }
-        ]
-      }
     },
     "backtick_statement": {
       "type": "SEQ",
@@ -5130,17 +5143,20 @@
                       "type": "CHOICE",
                       "members": [
                         {
-                          "type": "CHOICE",
-                          "members": [
-                            {
-                              "type": "SYMBOL",
-                              "name": "identifier"
-                            },
-                            {
-                              "type": "SYMBOL",
-                              "name": "string"
-                            }
-                          ]
+                          "type": "SYMBOL",
+                          "name": "identifier"
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SYMBOL",
+                          "name": "string"
                         },
                         {
                           "type": "BLANK"
@@ -6994,6 +7010,19 @@
       }
     },
     "identifier": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_identifier_word"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_split_identifier"
+        }
+      ]
+    },
+    "_identifier_word": {
       "type": "PATTERN",
       "value": "[_\\p{XID_Start}][_\\p{XID_Continue}]*"
     },
@@ -7847,7 +7876,40 @@
                 "value": 0,
                 "content": {
                   "type": "PATTERN",
-                  "value": "[^*/]|[*][^/]|[/][^*]"
+                  "value": "[^*/]+"
+                }
+              }
+            },
+            {
+              "type": "TOKEN",
+              "content": {
+                "type": "PREC",
+                "value": 2,
+                "content": {
+                  "type": "STRING",
+                  "value": "//"
+                }
+              }
+            },
+            {
+              "type": "TOKEN",
+              "content": {
+                "type": "PREC",
+                "value": 0,
+                "content": {
+                  "type": "STRING",
+                  "value": "*"
+                }
+              }
+            },
+            {
+              "type": "TOKEN",
+              "content": {
+                "type": "PREC",
+                "value": 0,
+                "content": {
+                  "type": "STRING",
+                  "value": "/"
                 }
               }
             }
@@ -7966,6 +8028,10 @@
   ],
   "precedences": [],
   "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "_split_identifier"
+    },
     {
       "type": "SYMBOL",
       "name": "heredoc_start"

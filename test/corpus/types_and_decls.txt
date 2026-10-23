@@ -1,0 +1,519 @@
+================================================================================
+enum
+================================================================================
+
+Color :: enum {
+    RED;
+    GREEN :: 5;
+    BLUE;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (enum_declaration
+      (identifier)
+      (enum_field
+        (identifier))
+      (enum_field
+        (identifier)
+        (integer))
+      (enum_field
+        (identifier)))))
+
+================================================================================
+enum with type
+================================================================================
+
+Flags :: enum_flags u8 {
+    A;
+    B;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (enum_declaration
+      (identifier)
+      (types
+        (identifier))
+      (enum_field
+        (identifier))
+      (enum_field
+        (identifier)))))
+
+================================================================================
+struct with members and defaults
+================================================================================
+
+Entity :: struct {
+    id: int;
+    name: string = "none";
+    pos: Vector3;
+    next: *Entity;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (struct_declaration
+      (identifier)
+      (struct_or_union
+        (struct_or_union_block
+          (variable_declaration
+            (identifier)
+            (types
+              (identifier)))
+          (variable_declaration
+            (identifier)
+            (types
+              (identifier))
+            (string
+              (string_contents
+                (string_content))))
+          (variable_declaration
+            (identifier)
+            (types
+              (identifier)))
+          (variable_declaration
+            (identifier)
+            (types
+              (pointer_type
+                (types
+                  (identifier))))))))))
+
+================================================================================
+struct with using
+================================================================================
+
+Player :: struct {
+    using entity: Entity;
+    score: int;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (struct_declaration
+      (identifier)
+      (struct_or_union
+        (struct_or_union_block
+          (using_statement
+            (statement
+              (declarations_that_require_a_semicolon
+                (variable_declaration
+                  (identifier)
+                  (types
+                    (identifier))))))
+          (variable_declaration
+            (identifier)
+            (types
+              (identifier))))))))
+
+================================================================================
+polymorphic struct
+================================================================================
+
+Array :: struct (T: Type) {
+    data: *T;
+    count: s64;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (struct_declaration
+      (identifier)
+      (struct_or_union
+        (named_parameters
+          (parameter
+            (identifier)
+            (types
+              (identifier))))
+        (struct_or_union_block
+          (variable_declaration
+            (identifier)
+            (types
+              (pointer_type
+                (types
+                  (identifier)))))
+          (variable_declaration
+            (identifier)
+            (types
+              (identifier))))))))
+
+================================================================================
+union
+================================================================================
+
+Value :: union {
+    i: s64;
+    f: float64;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (struct_declaration
+      (identifier)
+      (struct_or_union
+        (struct_or_union_block
+          (variable_declaration
+            (identifier)
+            (types
+              (identifier)))
+          (variable_declaration
+            (identifier)
+            (types
+              (identifier))))))))
+
+================================================================================
+polymorphic procedure
+================================================================================
+
+swap :: (a: *$T, b: *$T) {
+    t := <<a;
+    <<a = <<b;
+    <<b = t;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (named_parameters
+          (parameter
+            (identifier)
+            (types
+              (pointer_type
+                (types
+                  (polymorphic_type
+                    (types
+                      (identifier)))))))
+          (parameter
+            (identifier)
+            (types
+              (pointer_type
+                (types
+                  (polymorphic_type
+                    (types
+                      (identifier)))))))))
+      (block
+        (statement
+          (declarations_that_require_a_semicolon
+            (variable_declaration
+              (identifier)
+              (pointer_expression
+                (identifier)))))
+        (statement
+          (assignment_statement
+            (pointer_expression
+              (identifier))
+            (pointer_expression
+              (identifier))))
+        (statement
+          (assignment_statement
+            (pointer_expression
+              (identifier))
+            (identifier)))))))
+
+================================================================================
+procedure with defaults and varargs
+================================================================================
+
+print_all :: (fmt: string, args: ..Any, newline := true) {
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (named_parameters
+          (parameter
+            (identifier)
+            (types
+              (identifier)))
+          (parameter
+            (identifier)
+            (types
+              (identifier)))
+          (parameter
+            (identifier)
+            (boolean))))
+      (block))))
+
+================================================================================
+procedure with directives
+================================================================================
+
+foo :: (x: int) -> int #must {
+    return x;
+}
+bar :: (x: int) #foreign libc "bar";
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (named_parameters
+          (parameter
+            (identifier)
+            (types
+              (identifier))))
+        (procedure_returns
+          (returns
+            (identifier_type
+              (identifier))
+            (compiler_directive))))
+      (block
+        (statement
+          (return_statement
+            (identifier))))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (const_declaration
+        (identifier)
+        (types
+          (procedure
+            (named_parameters
+              (parameter
+                (identifier)
+                (types
+                  (identifier))))
+            (compiler_directive
+              (identifier))
+            (identifier)
+            (string
+              (string_contents
+                (string_content)))))))))
+
+================================================================================
+inline procedure
+================================================================================
+
+add :: inline (a: int, b: int) -> int {
+    return a + b;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (named_parameters
+          (parameter
+            (identifier)
+            (types
+              (identifier)))
+          (parameter
+            (identifier)
+            (types
+              (identifier))))
+        (procedure_returns
+          (returns
+            (identifier_type
+              (identifier)))))
+      (block
+        (statement
+          (return_statement
+            (binary_expression
+              (identifier)
+              (identifier))))))))
+
+================================================================================
+operator overload
+================================================================================
+
+operator + :: (a: Vector3, b: Vector3) -> Vector3 {
+    return .{a.x + b.x, a.y + b.y, a.z + b.z};
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (procedure
+        (named_parameters
+          (parameter
+            (identifier)
+            (types
+              (identifier)))
+          (parameter
+            (identifier)
+            (types
+              (identifier))))
+        (procedure_returns
+          (returns
+            (identifier_type
+              (identifier)))))
+      (block
+        (statement
+          (return_statement
+            (struct_literal
+              (binary_expression
+                (member_expression
+                  (identifier)
+                  (identifier))
+                (member_expression
+                  (identifier)
+                  (identifier)))
+              (binary_expression
+                (member_expression
+                  (identifier)
+                  (identifier))
+                (member_expression
+                  (identifier)
+                  (identifier)))
+              (binary_expression
+                (member_expression
+                  (identifier)
+                  (identifier))
+                (member_expression
+                  (identifier)
+                  (identifier))))))))))
+
+================================================================================
+pointer and array types
+================================================================================
+
+a: *int;
+b: [4]int;
+c: []int;
+d: [..]int;
+e: **u8;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (types
+          (pointer_type
+            (types
+              (identifier)))))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (types
+          (array_type
+            (integer)
+            (types
+              (identifier)))))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (types
+          (array_type
+            (types
+              (identifier)))))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (types
+          (array_type
+            (types
+              (identifier)))))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (types
+          (pointer_type
+            (types
+              (pointer_type
+                (types
+                  (identifier))))))))))
+
+================================================================================
+procedure type
+================================================================================
+
+callback: (int, int) -> bool;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (types
+          (procedure
+            (assignment_parameters
+              (identifier)
+              (identifier))
+            (procedure_returns
+              (returns
+                (identifier_type
+                  (identifier))))))))))
+
+================================================================================
+constants
+================================================================================
+
+PI :: 3.14159;
+NAME :: "jai";
+N : s64 : 10;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (const_declaration
+        (identifier)
+        (float))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (const_declaration
+        (identifier)
+        (string
+          (string_contents
+            (string_content))))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (const_declaration
+        (identifier)
+        (types
+          (identifier))
+        (integer)))))
+
+================================================================================
+uninitialized
+================================================================================
+
+x: int = ---;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (types
+          (identifier))
+        (uninitialized)))))

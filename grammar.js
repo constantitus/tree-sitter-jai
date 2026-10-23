@@ -63,8 +63,6 @@ module.exports = grammar({
         [$.call_expression],
 
         [$.member_expression, $.types, $.member_type, $.struct_literal, $.array_literal],
-
-        // [$.top_level_declarations, $.call_expression],
         [$.identifier_type, $.types, $.parameterized_struct_type],
         [$.expressions, $.identifier_type, $.assignment_parameters, $.types],
         [$.identifier_type, $.named_return, $.types],
@@ -79,7 +77,9 @@ module.exports = grammar({
     ],
 
     externals: $ => [
-        // $.identifier,
+        // Only identifiers that contain a split (`foo\   bar`) are scanned externally.
+        // Everything else is matched by `_identifier_word`, which keeps keyword extraction.
+        $._split_identifier,
         $.heredoc_start,
         $.heredoc_end,
         $.error_sentinel,
@@ -99,25 +99,10 @@ module.exports = grammar({
         $.literal,
     ],
 
-    word: $ => $.identifier,
+    word: $ => $._identifier_word,
 
     rules: {
         source_file: $ => repeat(seq($.statement, optional(';'))),
-
-        /* top_level_declarations: $ => choice(
-            $.procedure_declaration,
-            $.struct_declaration,
-            $.enum_declaration,
-            $.static_if_statement,
-
-            $.run_statement,
-            $.compiler_directive,
-
-            $.using_statement,
-            $.module_parameters,
-            seq($.compiler_directive, $.string),
-            seq($.declarations_that_require_a_semicolon, ';'),
-        ), */
 
         declarations_that_require_a_semicolon: $ => choice(
             $.module_parameters,
@@ -159,7 +144,6 @@ module.exports = grammar({
             $.while_statement,
             $.for_statement,
 
-            $.defer_statement,
             $.return_statement,
             $.break_statement,
             $.continue_statement,
@@ -190,8 +174,12 @@ module.exports = grammar({
             $.while_statement,
             $.for_statement,
             $.using_statement,
+            $.defer_statement,
             $.push_context_statement,
             $.no_semicolon_declaration,
+
+            // These are the only directives that are not followed by a ';'
+            alias(token(seq('#', choice('scope_file', 'scope_module', 'scope_export'))), $.compiler_directive),
         ),
 
         // Inside statements or as arguments
@@ -367,7 +355,7 @@ module.exports = grammar({
 
         struct_or_union_block: $ => prec.left(seq(
             '{',
-            optional(repeat(choice(
+            repeat(choice(
                 alias(field('directive', '#as'), $.compiler_directive),
                 $.run_or_insert_expression,
                 $.run_statement,
@@ -391,7 +379,7 @@ module.exports = grammar({
                     optional($.align_directive),
                     ';'
                 ),
-            ))),
+            )),
             '}',
         )),
 
@@ -555,10 +543,6 @@ module.exports = grammar({
             $.asm_register,
         ),
 
-        asm_size: $ => prec(999, seq(
-            $.asm_size_or_register
-        )),
-
         backtick_statement: $ => seq('`', $.statement),
 
         using_statement: $ => prec.left(PREC.CAST, seq(
@@ -594,7 +578,7 @@ module.exports = grammar({
                 '+=', '-=', '*=', '/=', '%=', '&=', '|=', '^=',
                 '<<=', '>>=', '<<<=', '>>>=', '||=', '&&=',
             ),
-            comma_sep1($.expressions, $.procedure),
+            comma_sep1($.expressions),
         ),
 
         if_statement: $ => prec.right(seq(
@@ -877,7 +861,8 @@ module.exports = grammar({
             field('modifier', repeat(
                 prec.right(2, seq(
                     $.compiler_directive,
-                    optional(choice($.identifier, $.string))
+                    optional($.identifier),
+                    optional($.string),
                 ))
             )),
         )),
@@ -1210,7 +1195,9 @@ module.exports = grammar({
             optional(token('//')), // This is so we can't have a comment right after an escape... dumb as fuck but whatever
         ))),
 
-        identifier: _ => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
+        identifier: $ => choice($._identifier_word, $._split_identifier),
+
+        _identifier_word: _ => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
 
         integer: _ =>
             choice(
@@ -1249,38 +1236,23 @@ module.exports = grammar({
         // comment: _ => prec(1, token(seq('//', /([^*/\n]|[*][^/\n]|[/][^*\n])*/))),
         // comment: _ => token(seq('//', /(\\+(.|\r?\n)|[^\\\n])*/)),
 
+        // Nested block comments work because `block_comment` is itself an extra, so it can
+        // appear inside `block_comment_text`. A lone '*' or '/' is its own token so the
+        // longer '*/' and '/*' tokens win whenever they are really there (e.g. `**/`).
         block_comment: $ => seq(
             token(prec(0, "/*")),
-            repeat($.block_comment_text,),
+            repeat($.block_comment_text),
             token(prec(0, '*/'))
         ),
 
-        block_comment_text: $ => prec.right(0, repeat1(choice(
-            token(prec(0, /[^*/]|[*][^/]|[/][^*]/)),
-            // token(prec(0, /[^*]|[^/]/)),
-
-            // token(prec(1, regexOr(
-            //     '[^*/]',    // any symbol except reserved
-            //     '[^*][/]',  // closing parenthesis, which is not a comment end
-            //     '[/][^/*]', // opening parenthesis, which is not a comment start
-            //     '[*][/][ \t]*(\r\n|\n)?[ \t]*[/][*]' // contiguous block comment border
-            // ))),
-            // token(prec(1, /\*/)),
-            // token(prec(1, /\//)),
-
+        block_comment_text: _ => prec.right(0, repeat1(choice(
+            token(prec(0, /[^*/]+/)),
+            token(prec(2, '//')), // so a line comment can't start inside and swallow the '*/'
+            token(prec(0, '*')),
+            token(prec(0, '/')),
         ))),
 }
 });
-
-function regexOr(regex) {
-    if (arguments.length > 1) {
-        regex = Array.from(arguments).join('|');
-    }
-    return {
-        type: 'PATTERN',
-        value: regex
-    };
-}
 
 // Creates a rule to match zero or more occurrences of `rule` separated by `sep`
 function sep(rule, s) {
@@ -1295,11 +1267,6 @@ function sep1(rule, s) {
 // Same as sep1, but allows passing right precedence
 function sep1_prec_right(p, rule, s) {
     return seq(rule, repeat(prec.right(p, seq(s, rule))));
-}
-
-// Same as sep1, but allows passing precedence
-function sep1_prec(p, rule, s) {
-    return seq(rule, repeat(prec(p, seq(s, rule))));
 }
 
 // Creates a rule to match one or more of the rules separated by a comma

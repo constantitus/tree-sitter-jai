@@ -1,0 +1,261 @@
+================================================================================
+import and load
+================================================================================
+
+#import "Basic";
+Math :: #import "Math";
+#load "other.jai";
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (import
+        (compiler_directive)
+        (string
+          (string_contents
+            (string_content))))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (import
+        (identifier)
+        (compiler_directive)
+        (string
+          (string_contents
+            (string_content))))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (load
+        (compiler_directive)
+        (string
+          (string_contents
+            (string_content)))))))
+
+================================================================================
+import with modifier
+================================================================================
+
+File :: #import,file "file.jai";
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (import
+        (identifier)
+        (compiler_directive)
+        (string
+          (string_contents
+            (string_content)))))))
+
+================================================================================
+run
+================================================================================
+
+x :: #run compute(5);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (const_declaration
+        (identifier)
+        (run_or_insert_expression
+          (compiler_directive)
+          (call_expression
+            (identifier)
+            (assignment_parameters
+              (integer))))))))
+
+================================================================================
+assert
+================================================================================
+
+#assert size_of(int) == 8;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (assert_statement
+        (compiler_directive)
+        (binary_expression
+          (call_expression
+            (identifier)
+            (assignment_parameters
+              (identifier)))
+          (integer))))))
+
+================================================================================
+static if
+================================================================================
+
+#if OS == .WINDOWS {
+    foo :: () {}
+} else {
+    bar :: () {}
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (static_if_statement
+      (compiler_directive)
+      (compiler_directive)
+      (if_statement_condition_and_consequence
+        (if_condition
+          (binary_expression
+            (identifier)
+            (member_expression
+              (identifier))))
+        (statement
+          (block
+            (statement
+              (procedure_declaration
+                (identifier)
+                (procedure
+                  (assignment_parameters))
+                (block)))))
+        (else_clause
+          (statement
+            (block
+              (statement
+                (procedure_declaration
+                  (identifier)
+                  (procedure
+                    (assignment_parameters))
+                  (block))))))))))
+
+================================================================================
+insert and code
+================================================================================
+
+main :: () {
+    #insert "x := 1;";
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (assignment_parameters))
+      (block
+        (statement
+          (run_or_insert_expression
+            (compiler_directive)
+            (string
+              (string_contents
+                (string_content)))))))))
+
+================================================================================
+module parameters
+================================================================================
+
+#module_parameters (DEBUG := false);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (module_parameters
+        (compiler_directive)
+        (named_parameters
+          (parameter
+            (identifier)
+            (boolean)))))))
+
+================================================================================
+scope directives
+================================================================================
+
+#scope_file
+foo :: 1;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (compiler_directive))
+  (statement
+    (declarations_that_require_a_semicolon
+      (const_declaration
+        (identifier)
+        (integer)))))
+
+================================================================================
+align and place
+================================================================================
+
+S :: struct {
+    a: u8 #align 16;
+    b: int;
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (struct_declaration
+      (identifier)
+      (struct_or_union
+        (struct_or_union_block
+          (variable_declaration
+            (identifier)
+            (types
+              (identifier)))
+          (align_directive
+            (compiler_directive)
+            (integer))
+          (variable_declaration
+            (identifier)
+            (types
+              (identifier))))))))
+
+================================================================================
+char literal
+================================================================================
+
+c := #char "a";
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (declarations_that_require_a_semicolon
+      (variable_declaration
+        (identifier)
+        (char_string
+          (string
+            (string_contents
+              (string_content))))))))
+
+================================================================================
+note
+================================================================================
+
+foo :: (x: int) @Note {
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (statement
+    (procedure_declaration
+      (identifier)
+      (procedure
+        (named_parameters
+          (parameter
+            (identifier)
+            (types
+              (identifier)))))
+      (note)
+      (block))))

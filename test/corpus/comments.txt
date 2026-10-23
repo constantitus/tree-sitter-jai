@@ -1,0 +1,73 @@
+================================================================================
+block comment ending in several stars
+================================================================================
+
+/* a **/
+x :: 1;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (block_comment
+    (block_comment_text))
+  (statement
+    (declarations_that_require_a_semicolon
+      (const_declaration
+        (identifier)
+        (integer)))))
+
+================================================================================
+line comment start inside a block comment
+================================================================================
+
+/* see http://x.com */
+x :: 1;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (block_comment
+    (block_comment_text))
+  (statement
+    (declarations_that_require_a_semicolon
+      (const_declaration
+        (identifier)
+        (integer)))))
+
+================================================================================
+nested block comments
+================================================================================
+
+/* outer /* inner */ still outer */
+x :: 1;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (block_comment
+    (block_comment_text
+      (block_comment
+        (block_comment_text))))
+  (statement
+    (declarations_that_require_a_semicolon
+      (const_declaration
+        (identifier)
+        (integer)))))
+
+================================================================================
+division and multiplication inside a block comment
+================================================================================
+
+/* a / b * c */
+x :: 1;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (block_comment
+    (block_comment_text))
+  (statement
+    (declarations_that_require_a_semicolon
+      (const_declaration
+        (identifier)
+        (integer)))))

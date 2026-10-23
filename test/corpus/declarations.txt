@@ -152,7 +152,7 @@ test_proc3 :: () -> type, parameterized_struct_type(T), named_return := struct_l
 						(named_return
 							(identifier)
 							(types
-								(MISSING identifier))
+								(identifier (MISSING _identifier_word)))
 							(struct_literal
 								(identifier))))))
 			(block))))
@@ -259,7 +259,8 @@ b := TestStruct2(69).{};
 						(types
 							(array_type
 								(integer)
-								(identifier))))
+								(types
+									(identifier)))))
 					(variable_declaration
 						(identifier)
 						(types

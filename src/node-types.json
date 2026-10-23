@@ -36,10 +36,6 @@
         "named": true
       },
       {
-        "type": "defer_statement",
-        "named": true
-      },
-      {
         "type": "enum_declaration",
         "named": true
       },
@@ -243,6 +239,14 @@
       },
       {
         "type": "block",
+        "named": true
+      },
+      {
+        "type": "compiler_directive",
+        "named": true
+      },
+      {
+        "type": "defer_statement",
         "named": true
       },
       {
@@ -1432,6 +1436,11 @@
   },
   {
     "type": "heredoc_body",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "identifier",
     "named": true,
     "fields": {}
   },
@@ -3910,10 +3919,6 @@
   },
   {
     "type": "heredoc_start",
-    "named": true
-  },
-  {
-    "type": "identifier",
     "named": true
   },
   {
